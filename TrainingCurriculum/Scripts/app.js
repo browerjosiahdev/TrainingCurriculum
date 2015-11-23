@@ -1,9 +1,9 @@
 ﻿var console;
 if (console === undefined) {
     console = {
-        "log": function (message) { },
-        "dir": function (message) { },
-        "warn": function (message) { }
+        "log": function log(message) { },
+        "dir": function dir(message) { },
+        "warn": function warn(message) { }
     };
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,14 +190,14 @@ mainApp.controller('MainController', ['$scope', '$sce', function ($scope, $sce) 
     // If not on the log in page, and the user isn't logged in, check to make sure the user is logged in before allowing them to access pages
     // other than the login page. 10/29/2015 1200 PM - josiahb
     if (!m_isLogin && !m_isLoggedIn) {
-        $.ajax({
-            "contentType": "application/json; charset=utf-8",
-            "dataType": "json",
-            "error": $scope.notLoggedIn,
-            "success": $scope.$loggedIn,
-            "type": "POST",
-            "url": "methods.aspx/GetUserId"
-        });
+        // $.ajax({
+        //     "contentType": "application/json; charset=utf-8",
+        //     "dataType": "json",
+        //     "error": $scope.notLoggedIn,
+        //     "success": $scope.$loggedIn,
+        //     "type": "POST",
+        //     "url": "methods.aspx/GetUserId"
+        // });
     } else {
         initialize();
     }
@@ -258,23 +258,23 @@ mainApp.controller('HomeController', ['$scope', '$controller', function ($scope,
 
     // Called if/when the user is logged in. 11/16/2015 1129 AM - josiahb
     $scope.loggedIn = function() {
-      $.ajax({
-          "contentType": "application/json; charset=utf-8",
-          "dataType": "json",
-          "error": $scope.scheduledError,
-          "success": $scope.scheduledSuccess,
-          "type": "POST",
-          "url": "methods.aspx/GetScheduledUserTraining"
-      });
-
-      $.ajax({
-        "contentType": "application/json; charset=utf-8",
-        "dataType": "json",
-        "error": $scope.requiredError,
-        "success": $scope.requiredSuccess,
-        "type": "POST",
-        "url": "methods.aspx/GetRequiredUserTrainings"
-      });
+      // $.ajax({
+      //     "contentType": "application/json; charset=utf-8",
+      //     "dataType": "json",
+      //     "error": $scope.scheduledError,
+      //     "success": $scope.scheduledSuccess,
+      //     "type": "POST",
+      //     "url": "methods.aspx/GetScheduledUserTraining"
+      // });
+      //
+      // $.ajax({
+      //   "contentType": "application/json; charset=utf-8",
+      //   "dataType": "json",
+      //   "error": $scope.requiredError,
+      //   "success": $scope.requiredSuccess,
+      //   "type": "POST",
+      //   "url": "methods.aspx/GetRequiredUserTrainings"
+      // });
     };
 
     // If the user is already logged in, call the logged in method.
@@ -327,15 +327,15 @@ mainApp.controller('LoginController', ['$scope', '$controller', function ($scope
             return;
         }
 
-        $.ajax({
-            "contentType": "application/json; charset=utf-8",
-            "data": JSON.stringify(account),
-            "dataType": "json",
-            "error": $scope.error,
-            "success": $scope.success,
-            "type": "POST",
-            "url": "methods.aspx/Login"
-        });
+        // $.ajax({
+        //     "contentType": "application/json; charset=utf-8",
+        //     "data": JSON.stringify(account),
+        //     "dataType": "json",
+        //     "error": $scope.error,
+        //     "success": $scope.success,
+        //     "type": "POST",
+        //     "url": "methods.aspx/Login"
+        // });
     };
 }]);
 
@@ -377,15 +377,15 @@ mainApp.controller('ResetPasswordController', ['$scope', function($scope) {
       $scope.passwordsMatch = true;
 
       // Call to update the users password. 11/16/2015 0507 PM - josiahb
-      $.ajax({
-        "contentType": "application/json; charset=utf-8",
-        "data": JSON.stringify(account),
-        "dataType": "json",
-        "error": $scope.error,
-        "success": $scope.success,
-        "type": "POST",
-        "url": "methods.aspx/ResetPassword"
-      });
+      // $.ajax({
+      //   "contentType": "application/json; charset=utf-8",
+      //   "data": JSON.stringify(account),
+      //   "dataType": "json",
+      //   "error": $scope.error,
+      //   "success": $scope.success,
+      //   "type": "POST",
+      //   "url": "methods.aspx/ResetPassword"
+      // });
     } else {
       $scope.passwordsMatch = false;
     }
@@ -413,14 +413,14 @@ mainApp.controller('RoleController', ['$scope', function ($scope) {
         }
     };
 
-    $.ajax({
-        "contentType": "application/json; charset=utf-8",
-        "dataType": "json",
-        "error": $scope.error,
-        "success": $scope.success,
-        "type": "POST",
-        "url": "methods.aspx/GetRoles"
-    });
+    // $.ajax({
+    //     "contentType": "application/json; charset=utf-8",
+    //     "dataType": "json",
+    //     "error": $scope.error,
+    //     "success": $scope.success,
+    //     "type": "POST",
+    //     "url": "methods.aspx/GetRoles"
+    // });
 }]);
 
 mainApp.controller('NewAccountController', ['$scope', function ($scope) {
@@ -495,15 +495,15 @@ mainApp.controller('NewAccountController', ['$scope', function ($scope) {
             "role": account.role
         };
 
-        $.ajax({
-            "contentType": "application/json; charset=utf-8",
-            "data": JSON.stringify(accountInformation),
-            "dataType": "json",
-            "error": $scope.error,
-            "success": $scope.success,
-            "type": "POST",
-            "url": "methods.aspx/CreateAccount"
-        });
+        // $.ajax({
+        //     "contentType": "application/json; charset=utf-8",
+        //     "data": JSON.stringify(accountInformation),
+        //     "dataType": "json",
+        //     "error": $scope.error,
+        //     "success": $scope.success,
+        //     "type": "POST",
+        //     "url": "methods.aspx/CreateAccount"
+        // });
     };
 }]);
 
