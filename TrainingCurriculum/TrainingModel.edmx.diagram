@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="08491684f88e47528348214f6ef5d4ad" Name="Diagram1">
+        <EntityTypeShape EntityType="TrainingModel.group" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrainingModel.phase" Width="1.5" PointX="3" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrainingModel.recurrence_type" Width="1.5" PointX="8.25" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrainingModel.role" Width="1.5" PointX="5.25" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrainingModel.status" Width="1.5" PointX="0.75" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrainingModel.sysdiagram" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrainingModel.training" Width="1.5" PointX="5.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrainingModel.training_material" Width="1.5" PointX="7.5" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrainingModel.training_schedule" Width="1.5" PointX="10.5" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrainingModel.user" Width="1.5" PointX="7.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrainingModel.users_training" Width="1.5" PointX="12.75" PointY="3.125" IsExpanded="true" />
+        <AssociationConnector Association="TrainingModel.fk_group_parent" ManuallyRouted="false" />
+        <AssociationConnector Association="TrainingModel.fk_phase_status" ManuallyRouted="false" />
+        <AssociationConnector Association="TrainingModel.fk_trainingschedule_recurrencetype" ManuallyRouted="false" />
+        <AssociationConnector Association="TrainingModel.fk_users_role" ManuallyRouted="false" />
+        <AssociationConnector Association="TrainingModel.fk_training_status" ManuallyRouted="false" />
+        <AssociationConnector Association="TrainingModel.fk_trainingmaterial_status" ManuallyRouted="false" />
+        <AssociationConnector Association="TrainingModel.fk_trainingschedule_status" ManuallyRouted="false" />
+        <AssociationConnector Association="TrainingModel.fk_users_status" ManuallyRouted="false" />
+        <AssociationConnector Association="TrainingModel.fk_userstraining_status" ManuallyRouted="false" />
+        <AssociationConnector Association="TrainingModel.fk_trainingmaterial_training" ManuallyRouted="false" />
+        <AssociationConnector Association="TrainingModel.fk_trainingschedule_training" ManuallyRouted="false" />
+        <AssociationConnector Association="TrainingModel.fk_userstraining_trainingschedule" ManuallyRouted="false" />
+        <AssociationConnector Association="TrainingModel.fk_userstraining_users" ManuallyRouted="false" />
+        <AssociationConnector Association="TrainingModel.training_facilitator" ManuallyRouted="false" />
+        <AssociationConnector Association="TrainingModel.training_group" ManuallyRouted="false" />
+        <AssociationConnector Association="TrainingModel.training_phase" ManuallyRouted="false" />
+        <AssociationConnector Association="TrainingModel.users_group" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

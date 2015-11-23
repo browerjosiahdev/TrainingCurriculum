@@ -1,0 +1,66 @@
+﻿<!--
+The below section displays the trainings associated with the current user, but
+haven't been scheduled by the user yet. 09/04/2015 0613 PM - josiahb
+-->
+<h1>REQUIRED TRAINING</h1>
+<section class="default training-section" id="incompleteTraining">
+    <div class="phase-container" ng-repeat="phase in requiredTrainings" ng-show="requiredTrainings.length">
+        <p class="phase-header">{{phase.name}}</p>
+        <table class="table table-hover table-training">
+            <tr ng-repeat="training in phase.trainings">
+                <td>{{training.topic}}</td>
+                <td ng-bind-html="renderHtml(training, 'description')"></td>
+                <td>{{training.duration}} minutes</td>
+            </tr>
+        </table>
+    </div>
+    <div class="phase-empty" ng-hide="requiredTrainings.length">
+      This list is currently empty.
+    </div>
+</section>
+<a class="view-more" data-linked="incompleteTraining" href="javascript:void(0);" id="incompleteViewMore" ng-show="requiredTrainings.length">VIEW MORE...</a>
+<a class="view-less none" data-linked="incompleteTraining" href="javascript:void(0);" id="incompleteViewLess">VIEW LESS...</a>
+<!--
+The below section displays the trainings the current user is scheduled to take, but
+has yet to complete. 09/04/2015 0613 PM - josiahb
+-->
+<h1>SCHEDULED TRAINING</h1>
+<section class="default training-section" id="scheduledTraining">
+    <div class="phase-container" ng-repeat="phase in scheduledTrainings" ng-show="scheduledTrainings.length">
+        <p class="phase-header">{{phase.name}}</p>
+        <table class="table table-hover table-training">
+            <tr ng-repeat="training in phase.trainings">
+                <td>{{training.topic}}</td>
+                <td ng-bind-html="renderHtml(training, 'description')"></td>
+                <td>{{training.duration}} minutes</td>
+            </tr>
+        </table>
+    </div>
+    <div class="phase-empty" ng-hide="scheduledTrainings.length">
+      This list is currently empty.
+    </div>
+</section>
+<a class="view-more" data-linked="scheduledTraining" href="javascript:void(0);" id="scheduledViewMore" ng-show="scheduledTrainings.length">VIEW MORE...</a>
+<a class="view-less none" data-linked="scheduledTraining" href="javascript:void(0);" id="scheduledViewLess">VIEW LESS...</a>
+<!--
+The below section displays the trainings the current user has already completed.
+09/04/2015 0614 PM - josiahb
+-->
+<h1>COMPLETE TRAINING</h1>
+<section class="default training-section" id="completeTraining">
+    <div class="phase-container" ng-repeat="phase in completeTrainings" ng-show="completeTrainings.length">
+        <p class="phase-header">{{phase.name}}</p>
+        <table class="table table-hover table-training">
+            <tr ng-repeat="training in phase.trainings">
+                <td>{{training.topic}}</td>
+                <td ng-bind-html="renderHtml(training, 'description')"></td>
+                <td>{{training.duration}} minutes</td>
+            </tr>
+        </table>
+    </div>
+    <div class="phase-empty" ng-hide="completeTrainings.length">
+      This list is currently empty.
+    </div>
+</section>
+<a class="view-more" data-linked="completeTraining" href="javascript:void(0);" id="completeViewMore" ng-show="completeTrainings.length">VIEW MORE...</a>
+<a class="view-less none" data-linked="completeTraining" href="javascript:void(0);" id="completeViewLess">VIEW LESS...</a>

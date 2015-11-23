@@ -1,0 +1,58 @@
+﻿<button class="btn btn-info" data-target="#newAccount" data-toggle="modal" type="button">Create New Account</button>
+<!-- Modal used to create a new user account. 10/22/2015 0858 AM - josiahb -->
+<div class="modal fade" id="newAccount" ng-controller="NewAccountController as newAccountCtrl" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" type="button">&times;</button>
+                <h4 class="modal-title">Create New Account</h4>
+            </div>
+            <div class="modal-body">
+                <!-- Form for creating a new account. 10/22/2015 0859 AM - josiahb -->
+                <form id="newAccount" name="newAccount">
+                    <div class="form-group">
+                        <label for="newAccountEmail">Email:</label>
+                        <input class="form-control" id="newAccountEmail" maxlength="100" name="newAccountEmail" ng-model="account.email" required="required" type="email"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="newAccountPassword">Password:</label>
+                        <input class="form-control" id="newAccountPassword" maxlength="100" name="newAccountPassword" ng-model="account.password" required="required" type="password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="newAccountVerifyPassword">Verify password:</label>
+                        <input class="form-control" id="newAccountVerifyPassword" maxlength="100" name="newAccountVerifyPassword" ng-model="account.passwordVerify" required="required" type="password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="newAccountFirstName">First name:</label>
+                        <input class="form-control" id="newAccountFirstName" maxlength="100" name="newAccountFirstName" ng-model="account.firstName" required="required" type="text" />
+                    </div>
+                    <div class="form-group">
+                        <label for="newAccountLastName">Last name:</label>
+                        <input class="form-control" id="newAccountLastName" maxlength="100" name="newAccountLastName" ng-model="account.lastName" required="required" type="text" />
+                    </div>
+                    <div class="form-group">
+                        <label for="newAccountStartDate">Start date:</label>
+                        <input class="form-control date-picker-util" id="newAccountStartDate" maxlength="100" name="newAccountStartDate" ng-model="account.startDate" type="text" />
+                    </div>
+                    <div class="form-group">
+                        <label for="newAccountRole">Role:</label>
+                        <select id="newAccountRole" name="newAccountRole" ng-controller="RoleController as roleCtrl" ng-model="account.role" required="required">
+                            <option ng-repeat="role in roles" value="{{role.id}}">{{role.name}}</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-default" id="newAccountSubmit" type="submit" ng-click="submit(account)">Create Account</button>
+                </form>
+                <!-- Warning boxes to be displayed if there is an error with the new account form. 10/22/2015 0900 AM - josiahb -->
+                <div class="alert alert-danger" ng-hide="passwordsMatch">
+                    The passwords do not match.
+                </div>
+                <div class="alert alert-danger" ng-show="noRole">
+                    Please select a role for the user.
+                </div>
+                <div class="alert alert-danger" ng-show="hasError">
+                    There was an issue creating the user account, please make sure a user with the same email address does not already exist.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+﻿<form id="login" name="login">
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input class="form-control" id="email" maxlength="100" name="email" ng-model="account.email" required="required" type="email" />
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input class="form-control" id="password" maxlength="100" name="password" ng-model="account.password" required="required" type="password" />
+    </div>
+    <button class="btn btn-default" id="submit" type="submit" ng-click="submit(account)">Login</button>
+</form>

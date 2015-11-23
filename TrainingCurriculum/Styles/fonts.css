@@ -1,0 +1,40 @@
+﻿@font-face {
+    font-family: 'Futura Md BT';
+    font-style: normal;
+    font-weight: normal;
+    src: url('../fonts/futuram-webfont.eot') format('embedded-opentype'),
+         url('../fonts/futuram-webfont.svg') format('svg'),
+         url('../fonts/futuram-webfont.ttf') format('truetype'),
+         url('../fonts/futuram-webfont.woff') format('woff'),
+         url('../fonts/futuram-webfont.woff2') format('woff');
+}
+@font-face {
+    font-family: 'Futura Md BT';
+    font-style: normal;
+    font-weight: bold;
+    src: url('../fonts/futurab-webfont.eot') format('embedded-opentype'),
+         url('../fonts/futurab-webfont.svg') format('svg'),
+         url('../fonts/futurab-webfont.ttf') format('truetype'),
+         url('../fonts/futurab-webfont.woff') format('woff'),
+         url('../fonts/futurab-webfont.woff2') format('woff');
+}
+@font-face {
+    font-family: 'Futura Md BT';
+    font-style: italic;
+    font-weight: normal;
+    src: url('../fonts/futurami-webfont.eot') format('embedded-opentype'),
+         url('../fonts/futurami-webfont.svg') format('svg'),
+         url('../fonts/futurami-webfont.ttf') format('truetype'),
+         url('../fonts/futurami-webfont.woff') format('woff'),
+         url('../fonts/futurami-webfont.woff2') format('woff');
+}
+@font-face {
+    font-family: 'Futura Md BT';
+    font-style: italic;
+    font-weight: bold;
+    src: url('../fonts/futurabi-webfont.eot') format('embedded-opentype'),
+         url('../fonts/futurabi-webfont.svg') format('svg'),
+         url('../fonts/futurabi-webfont.ttf') format('truetype'),
+         url('../fonts/futurabi-webfont.woff') format('woff'),
+         url('../fonts/futurabi-webfont.woff2') format('woff');
+}

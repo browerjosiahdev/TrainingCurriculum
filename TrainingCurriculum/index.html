@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="en-US" ng-app="mainApp">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <!--<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />-->
+    <link href="./css/bootstrap.min.css" rel="stylesheet" />
+    <link href="./css/fonts.css" rel="stylesheet" />
+    <link href="./css/app.css" rel="stylesheet" />
+    <link href="./css/jquery-ui.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container-fluid">
+        <!--
+        Header bar, containing the navigation. 10/22/2015 0904 AM - josiahb
+        Update to use custom angular directive. 10/28/2015 0603 PM - josiahb
+        -->
+        <header navigation-header></header>
+        <!-- Main content area. 10/22/2015 0905 AM - josiahb -->
+        <section id="main" ng-view></section>
+    </div>
+    <!--
+    Preloader to show until the page has finished loading. 10/28/2015 0309 PM - josiahb
+    Update to use a custom angular directive. 10/28/2015 0607 PM - josiahb
+    -->
+    <div preloader></div>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>-->
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/angular.min.js"></script>
+    <script src="./js/angular-route.js"></script>
+    <script src="./js/app.js"></script>
+    <script src="./js/jquery-ui.min.js"></script>
+</body>
+</html>
