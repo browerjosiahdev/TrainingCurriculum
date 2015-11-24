@@ -221,79 +221,34 @@ mainApp.controller('HomeController', ['$scope', '$controller', function ($scope,
     $scope.requiredTrainings  = [];
     $scope.completeTrainings  = [];
 
-    // Error/success methods to be called when the scheduled training data
-    // has been returned.
-    $scope.scheduledError = function (jqXHR, status, message) {
+    $scope.trainingsSuccess = function (data) {
+      if (typeof data !== 'undefined') {
+        $scope.scheduledTrainings = data.scheduled;
+        $scope.requiredTrainings  = data.required;
+        $scope.completeTrainings  = data.complete;
+        $scope.$apply();
+      }
+    };
+    $scope.trainingError = function (jqXHR, status, message) {
       var errorData = JSON.parse(jqXHR.responseText);
 
-      // display warning message if there was an error retrieving the training data. 10/30/2015 0549 PM - josiahb
-      console.warn('There was a(n) ' + status + ' retrieving your scheduled trainings: ' + errorData.ExceptionMessage);
-    };
-    $scope.scheduledSuccess = function (data) {
-        console.dir(data);
-
-        // if (data.d !== undefined) {
-        //     var trainingData = JSON.parse(data.d);
-        //
-        //     $scope.scheduledTrainings = trainingData;
-        //     $scope.$apply();
-        // }
-    };
-
-    // Error/success methods to be called when the required training data
-    // has been returned.
-    $scope.requiredError = function (error, status, message) {
-        // display warning message if there was an error retrieving the training data. 10/30/2015 0549 PM - josiahb
-        console.warn('There was a(n) ' + status + ' retrieving your required trainings: ' + message);
-    };
-    $scope.requiredSuccess = function (data) {
-        if (data.d !== undefined) {
-            var trainingData = JSON.parse(data.d);
-
-            console.dir(trainingData);
-
-//            $scope.requiredTrainings = trainingData;
-//            $scope.$apply();
-        }
+      console.warn('There was a(n) ' + status + ' retrieving the training data: ' + errorData.ExceptionMessage);
     };
 
     // Called if/when the user is logged in. 11/16/2015 1129 AM - josiahb
     $scope.loggedIn = function() {
-      // $.ajax({
-      //     "contentType": "application/json; charset=utf-8",
-      //     "dataType": "json",
-      //     "error": $scope.scheduledError,
-      //     "success": $scope.scheduledSuccess,
-      //     "type": "POST",
-      //     "url": "methods.aspx/GetScheduledUserTraining"
-      // });
-      //
-      // $.ajax({
-      //   "contentType": "application/json; charset=utf-8",
-      //   "dataType": "json",
-      //   "error": $scope.requiredError,
-      //   "success": $scope.requiredSuccess,
-      //   "type": "POST",
-      //   "url": "methods.aspx/GetRequiredUserTrainings"
-      // });
+      $.getJSON('api/trainings/all')
+        .done($scope.trainingsSuccess)
+        .fail($scope.trainingError);
     };
 
     // If the user is already logged in, call the logged in method.
     // 11/16/2015 1130 AM - josiahb
-    if (m_isLoggedIn) {
-      $scope.loggedIn();
-    }
+    // if (m_isLoggedIn) {
+    //   $scope.loggedIn();
+    // }
 
-    // $.ajax({
-    //   "contentType": "application/json; charset=utf-8",
-    //   "dataType": "json",
-    //   "type": "GET",
-    //   "url": "api/trainings/scheduled"
-    //   //"url": "api/trainings/test-data"
-    // })
-    $.getJSON('api/trainings/scheduled')
-      .done($scope.scheduledSuccess)
-      .fail($scope.scheduledError);
+    $scope.loggedIn();
 }]);
 
 mainApp.controller('AdminController', ['$scope', '$controller', function ($scope, $controller) {

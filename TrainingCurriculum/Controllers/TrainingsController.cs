@@ -9,36 +9,40 @@ namespace TrainingCurriculum.Controllers
 {
     public class TrainingsController : ApiController
     {
+        [ActionName("all")]
+        public dynamic GetAllTrainings()
+        {
+            return new
+            {
+                scheduled = GetScheduledTrainings()
+            };
+        }
+
         [ActionName("scheduled")]
         public IEnumerable<dynamic> GetScheduledTrainings()
         {
-            TrainingEntities db = new TrainingEntities();
+            TrainingEntities entitites = new TrainingEntities();
 
-            var trainings = db.trainings.AsEnumerable()
-                                        .Where(training => training.status.name == "ACTIVE")
-                                        .Select(training => new
-                                        {
-                                            training.id,
-                                            training.topic,
-                                            training.description,
-                                            training.duration,
-                                            training.status.name
-                                        })/*
-                                        .Join(db.training_schedule,
-                                              training => training.id,
-                                              schedule => schedule.training_id,
-                                              (training, schedule) =>
-                                              new{ })
-                                        .Join(db.users_training,
-                                              schedule => schedule.id,
-                                              userTraining => userTraining.training_schedule_id,
-                                              (schedule, userTraining) =>
-                                              new { })
-                                        .Join(db.users,
-                                              userTraining => userTraining.UserTraining.user_id,
-                                              user => user.id,
-                                              (userTraining, user) =>
-                                              new { })*/;
+            var trainings = entitites.trainings.AsEnumerable()
+                                               .Join(entitites.training_schedule.AsEnumerable(),
+                                                     training => training.id,
+                                                     schedule => schedule.training_id,
+                                                     (training, schedule) => new
+                                                     {
+                                                         training,
+                                                         schedule
+                                                     })
+                                               .Where(data => data.training.status.name == "ACTIVE" &&
+                                                              data.schedule.status.name == "ACTIVE" &&
+                                                              data.schedule.users_training.Any(userTraining => userTraining.user_id == 1))
+                                               .Select(data => new
+                                               {
+                                                   data.training.id,
+                                                   data.training.topic,
+                                                   data.training.description,
+                                                   data.training.duration,
+                                                   data.training.status.name
+                                               });
 
             return trainings.ToList();
         }
