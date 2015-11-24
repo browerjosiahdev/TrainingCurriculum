@@ -228,12 +228,14 @@ mainApp.controller('HomeController', ['$scope', '$controller', function ($scope,
         console.warn('There was a(n) ' + status + ' retrieving your scheduled trainings: ' + message);
     };
     $scope.scheduledSuccess = function (data) {
-        if (data.d !== undefined) {
-            var trainingData = JSON.parse(data.d);
+        console.dir(data);
 
-            $scope.scheduledTrainings = trainingData;
-            $scope.$apply();
-        }
+        // if (data.d !== undefined) {
+        //     var trainingData = JSON.parse(data.d);
+        //
+        //     $scope.scheduledTrainings = trainingData;
+        //     $scope.$apply();
+        // }
     };
 
     // Error/success methods to be called when the required training data
@@ -243,9 +245,6 @@ mainApp.controller('HomeController', ['$scope', '$controller', function ($scope,
         console.warn('There was a(n) ' + status + ' retrieving your required trainings: ' + message);
     };
     $scope.requiredSuccess = function (data) {
-        console.log('requiredSuccess()');
-        console.dir(data);
-
         if (data.d !== undefined) {
             var trainingData = JSON.parse(data.d);
 
@@ -282,6 +281,16 @@ mainApp.controller('HomeController', ['$scope', '$controller', function ($scope,
     if (m_isLoggedIn) {
       $scope.loggedIn();
     }
+
+    $.ajax({
+      "contentType": "application/json; charset=utf-8",
+      "dataType": "json",
+      "type": "GET",
+      "url": "api/trainings/scheduled"
+      //"url": "api/trainings/test-data"
+    })
+    .done($scope.scheduledSuccess)
+    .fail($scope.scheduledError);
 }]);
 
 mainApp.controller('AdminController', ['$scope', '$controller', function ($scope, $controller) {
@@ -512,7 +521,7 @@ mainApp.controller('NewAccountController', ['$scope', function ($scope) {
 /////////////////////////////////////////////////////////////////////////////////////
 
 mainApp.directive('navigationHeader', function () {
-    var template = '<a href="#home"><img alt="AllenComm logo" height="36" id="allencommLogo" src="./img/allencomm_logo.svg" width="36" /></a>' +
+    var template = '<a href="#home"><img alt="AllenComm logo" height="36" id="allencommLogo" src="./Images/allencomm_logo.svg" width="36" /></a>' +
                    '<nav>' +
                        '<a href="#admin">Administrator</a>' +
                    '</nav>';
@@ -524,7 +533,7 @@ mainApp.directive('navigationHeader', function () {
 
 mainApp.directive('preloader', function () {
     var template = '<div class="delay-show" id="preloadContainer">' +
-                       '<img alt="preloader" id="preloader" src="./img/loading.gif" />' +
+                       '<img alt="preloader" id="preloader" src="./Images/loading.gif" />' +
                    '</div>';
 
     return {

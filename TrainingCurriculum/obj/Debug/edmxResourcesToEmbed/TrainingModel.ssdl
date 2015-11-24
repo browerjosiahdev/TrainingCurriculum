@@ -1,0 +1,532 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TrainingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="group">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="parent_id" Type="smallint" />
+    <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="description" Type="varchar" MaxLength="2000" Nullable="false" />
+  </EntityType>
+  <EntityType Name="phase">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="start" Type="smallint" Nullable="false" />
+    <Property Name="end" Type="smallint" Nullable="false" />
+    <Property Name="objectives" Type="varchar" MaxLength="2000" Nullable="false" />
+    <Property Name="description" Type="varchar" MaxLength="2000" Nullable="false" />
+    <Property Name="status_id" Type="smallint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="recurrence_type">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="description" Type="varchar" MaxLength="500" Nullable="false" />
+  </EntityType>
+  <EntityType Name="role">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="description" Type="varchar" MaxLength="2000" Nullable="false" />
+  </EntityType>
+  <EntityType Name="status">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="description" Type="varchar" MaxLength="2000" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="training">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="topic" Type="varchar" MaxLength="500" Nullable="false" />
+    <Property Name="description" Type="varchar" MaxLength="2000" Nullable="false" />
+    <Property Name="duration" Type="int" Nullable="false" />
+    <Property Name="status_id" Type="smallint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="training_facilitator">
+    <Key>
+      <PropertyRef Name="training_id" />
+      <PropertyRef Name="user_id" />
+    </Key>
+    <Property Name="training_id" Type="int" Nullable="false" />
+    <Property Name="user_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="training_group">
+    <Key>
+      <PropertyRef Name="training_id" />
+      <PropertyRef Name="group_id" />
+    </Key>
+    <Property Name="training_id" Type="int" Nullable="false" />
+    <Property Name="group_id" Type="smallint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="training_material">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="training_id" Type="int" Nullable="false" />
+    <Property Name="link" Type="varchar" MaxLength="1000" Nullable="false" />
+    <Property Name="description" Type="varchar" MaxLength="2000" Nullable="false" />
+    <Property Name="status_id" Type="smallint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="training_phase">
+    <Key>
+      <PropertyRef Name="training_id" />
+      <PropertyRef Name="phase_id" />
+    </Key>
+    <Property Name="training_id" Type="int" Nullable="false" />
+    <Property Name="phase_id" Type="smallint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="training_schedule">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="training_id" Type="int" Nullable="false" />
+    <Property Name="start_date" Type="datetime" Nullable="false" />
+    <Property Name="recurrence" Type="smallint" Nullable="false" />
+    <Property Name="recurrence_type_id" Type="tinyint" />
+    <Property Name="status_id" Type="smallint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="users">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="email" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="password" Type="char" MaxLength="256" Nullable="false" />
+    <Property Name="password_reset" Type="tinyint" Nullable="false" />
+    <Property Name="first_name" Type="varchar" MaxLength="40" Nullable="false" />
+    <Property Name="last_name" Type="varchar" MaxLength="40" Nullable="false" />
+    <Property Name="start_date" Type="date" Nullable="false" />
+    <Property Name="role_id" Type="smallint" Nullable="false" />
+    <Property Name="status_id" Type="smallint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="users_group">
+    <Key>
+      <PropertyRef Name="user_id" />
+      <PropertyRef Name="group_id" />
+    </Key>
+    <Property Name="user_id" Type="int" Nullable="false" />
+    <Property Name="group_id" Type="smallint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="users_training">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="user_id" Type="int" Nullable="false" />
+    <Property Name="training_schedule_id" Type="int" Nullable="false" />
+    <Property Name="recurrence" Type="smallint" Nullable="false" />
+    <Property Name="status_id" Type="smallint" Nullable="false" />
+  </EntityType>
+  <Association Name="fk_group_parent">
+    <End Role="group" Type="Self.group" Multiplicity="0..1" />
+    <End Role="group1" Type="Self.group" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="group">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="group1">
+        <PropertyRef Name="parent_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_phase_status">
+    <End Role="status" Type="Self.status" Multiplicity="1" />
+    <End Role="phase" Type="Self.phase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="status">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="phase">
+        <PropertyRef Name="status_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_training_status">
+    <End Role="status" Type="Self.status" Multiplicity="1" />
+    <End Role="training" Type="Self.training" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="status">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training">
+        <PropertyRef Name="status_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_trainingfacilitator_training">
+    <End Role="training" Type="Self.training" Multiplicity="1" />
+    <End Role="training_facilitator" Type="Self.training_facilitator" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="training">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training_facilitator">
+        <PropertyRef Name="training_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_trainingfacilitator_users">
+    <End Role="users" Type="Self.users" Multiplicity="1" />
+    <End Role="training_facilitator" Type="Self.training_facilitator" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training_facilitator">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_traininggroup_group">
+    <End Role="group" Type="Self.group" Multiplicity="1" />
+    <End Role="training_group" Type="Self.training_group" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="group">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training_group">
+        <PropertyRef Name="group_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_traininggroup_training">
+    <End Role="training" Type="Self.training" Multiplicity="1" />
+    <End Role="training_group" Type="Self.training_group" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="training">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training_group">
+        <PropertyRef Name="training_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_trainingmaterial_status">
+    <End Role="status" Type="Self.status" Multiplicity="1" />
+    <End Role="training_material" Type="Self.training_material" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="status">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training_material">
+        <PropertyRef Name="status_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_trainingmaterial_training">
+    <End Role="training" Type="Self.training" Multiplicity="1" />
+    <End Role="training_material" Type="Self.training_material" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="training">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training_material">
+        <PropertyRef Name="training_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_trainingphase_phase">
+    <End Role="phase" Type="Self.phase" Multiplicity="1" />
+    <End Role="training_phase" Type="Self.training_phase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="phase">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training_phase">
+        <PropertyRef Name="phase_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_trainingphase_training">
+    <End Role="training" Type="Self.training" Multiplicity="1" />
+    <End Role="training_phase" Type="Self.training_phase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="training">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training_phase">
+        <PropertyRef Name="training_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_trainingschedule_recurrencetype">
+    <End Role="recurrence_type" Type="Self.recurrence_type" Multiplicity="0..1" />
+    <End Role="training_schedule" Type="Self.training_schedule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="recurrence_type">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training_schedule">
+        <PropertyRef Name="recurrence_type_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_trainingschedule_status">
+    <End Role="status" Type="Self.status" Multiplicity="1" />
+    <End Role="training_schedule" Type="Self.training_schedule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="status">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training_schedule">
+        <PropertyRef Name="status_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_trainingschedule_training">
+    <End Role="training" Type="Self.training" Multiplicity="1" />
+    <End Role="training_schedule" Type="Self.training_schedule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="training">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training_schedule">
+        <PropertyRef Name="training_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_users_role">
+    <End Role="role" Type="Self.role" Multiplicity="1" />
+    <End Role="users" Type="Self.users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="role">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="users">
+        <PropertyRef Name="role_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_users_status">
+    <End Role="status" Type="Self.status" Multiplicity="1" />
+    <End Role="users" Type="Self.users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="status">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="users">
+        <PropertyRef Name="status_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_usersgroup_group">
+    <End Role="group" Type="Self.group" Multiplicity="1" />
+    <End Role="users_group" Type="Self.users_group" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="group">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="users_group">
+        <PropertyRef Name="group_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_usersgroup_users">
+    <End Role="users" Type="Self.users" Multiplicity="1" />
+    <End Role="users_group" Type="Self.users_group" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="users_group">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_userstraining_status">
+    <End Role="status" Type="Self.status" Multiplicity="1" />
+    <End Role="users_training" Type="Self.users_training" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="status">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="users_training">
+        <PropertyRef Name="status_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_userstraining_trainingschedule">
+    <End Role="training_schedule" Type="Self.training_schedule" Multiplicity="1" />
+    <End Role="users_training" Type="Self.users_training" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="training_schedule">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="users_training">
+        <PropertyRef Name="training_schedule_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_userstraining_users">
+    <End Role="users" Type="Self.users" Multiplicity="1" />
+    <End Role="users_training" Type="Self.users_training" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="users_training">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+  <Function Name="GetParentGroups" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="groupId" Type="smallint" Mode="In" />
+  </Function>
+  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="TrainingModelStoreContainer">
+    <EntitySet Name="group" EntityType="Self.group" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="phase" EntityType="Self.phase" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="recurrence_type" EntityType="Self.recurrence_type" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="role" EntityType="Self.role" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="status" EntityType="Self.status" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="training" EntityType="Self.training" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="training_facilitator" EntityType="Self.training_facilitator" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="training_group" EntityType="Self.training_group" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="training_material" EntityType="Self.training_material" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="training_phase" EntityType="Self.training_phase" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="training_schedule" EntityType="Self.training_schedule" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="users_group" EntityType="Self.users_group" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="users_training" EntityType="Self.users_training" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="fk_group_parent" Association="Self.fk_group_parent">
+      <End Role="group" EntitySet="group" />
+      <End Role="group1" EntitySet="group" />
+    </AssociationSet>
+    <AssociationSet Name="fk_phase_status" Association="Self.fk_phase_status">
+      <End Role="status" EntitySet="status" />
+      <End Role="phase" EntitySet="phase" />
+    </AssociationSet>
+    <AssociationSet Name="fk_training_status" Association="Self.fk_training_status">
+      <End Role="status" EntitySet="status" />
+      <End Role="training" EntitySet="training" />
+    </AssociationSet>
+    <AssociationSet Name="fk_trainingfacilitator_training" Association="Self.fk_trainingfacilitator_training">
+      <End Role="training" EntitySet="training" />
+      <End Role="training_facilitator" EntitySet="training_facilitator" />
+    </AssociationSet>
+    <AssociationSet Name="fk_trainingfacilitator_users" Association="Self.fk_trainingfacilitator_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="training_facilitator" EntitySet="training_facilitator" />
+    </AssociationSet>
+    <AssociationSet Name="fk_traininggroup_group" Association="Self.fk_traininggroup_group">
+      <End Role="group" EntitySet="group" />
+      <End Role="training_group" EntitySet="training_group" />
+    </AssociationSet>
+    <AssociationSet Name="fk_traininggroup_training" Association="Self.fk_traininggroup_training">
+      <End Role="training" EntitySet="training" />
+      <End Role="training_group" EntitySet="training_group" />
+    </AssociationSet>
+    <AssociationSet Name="fk_trainingmaterial_status" Association="Self.fk_trainingmaterial_status">
+      <End Role="status" EntitySet="status" />
+      <End Role="training_material" EntitySet="training_material" />
+    </AssociationSet>
+    <AssociationSet Name="fk_trainingmaterial_training" Association="Self.fk_trainingmaterial_training">
+      <End Role="training" EntitySet="training" />
+      <End Role="training_material" EntitySet="training_material" />
+    </AssociationSet>
+    <AssociationSet Name="fk_trainingphase_phase" Association="Self.fk_trainingphase_phase">
+      <End Role="phase" EntitySet="phase" />
+      <End Role="training_phase" EntitySet="training_phase" />
+    </AssociationSet>
+    <AssociationSet Name="fk_trainingphase_training" Association="Self.fk_trainingphase_training">
+      <End Role="training" EntitySet="training" />
+      <End Role="training_phase" EntitySet="training_phase" />
+    </AssociationSet>
+    <AssociationSet Name="fk_trainingschedule_recurrencetype" Association="Self.fk_trainingschedule_recurrencetype">
+      <End Role="recurrence_type" EntitySet="recurrence_type" />
+      <End Role="training_schedule" EntitySet="training_schedule" />
+    </AssociationSet>
+    <AssociationSet Name="fk_trainingschedule_status" Association="Self.fk_trainingschedule_status">
+      <End Role="status" EntitySet="status" />
+      <End Role="training_schedule" EntitySet="training_schedule" />
+    </AssociationSet>
+    <AssociationSet Name="fk_trainingschedule_training" Association="Self.fk_trainingschedule_training">
+      <End Role="training" EntitySet="training" />
+      <End Role="training_schedule" EntitySet="training_schedule" />
+    </AssociationSet>
+    <AssociationSet Name="fk_users_role" Association="Self.fk_users_role">
+      <End Role="role" EntitySet="role" />
+      <End Role="users" EntitySet="users" />
+    </AssociationSet>
+    <AssociationSet Name="fk_users_status" Association="Self.fk_users_status">
+      <End Role="status" EntitySet="status" />
+      <End Role="users" EntitySet="users" />
+    </AssociationSet>
+    <AssociationSet Name="fk_usersgroup_group" Association="Self.fk_usersgroup_group">
+      <End Role="group" EntitySet="group" />
+      <End Role="users_group" EntitySet="users_group" />
+    </AssociationSet>
+    <AssociationSet Name="fk_usersgroup_users" Association="Self.fk_usersgroup_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="users_group" EntitySet="users_group" />
+    </AssociationSet>
+    <AssociationSet Name="fk_userstraining_status" Association="Self.fk_userstraining_status">
+      <End Role="status" EntitySet="status" />
+      <End Role="users_training" EntitySet="users_training" />
+    </AssociationSet>
+    <AssociationSet Name="fk_userstraining_trainingschedule" Association="Self.fk_userstraining_trainingschedule">
+      <End Role="training_schedule" EntitySet="training_schedule" />
+      <End Role="users_training" EntitySet="users_training" />
+    </AssociationSet>
+    <AssociationSet Name="fk_userstraining_users" Association="Self.fk_userstraining_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="users_training" EntitySet="users_training" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

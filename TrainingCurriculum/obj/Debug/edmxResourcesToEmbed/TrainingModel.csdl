@@ -1,0 +1,448 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TrainingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="group">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="parent_id" Type="Int16" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="group1" Relationship="Self.fk_group_parent" FromRole="group" ToRole="group1" />
+    <NavigationProperty Name="group2" Relationship="Self.fk_group_parent" FromRole="group1" ToRole="group" />
+    <NavigationProperty Name="trainings" Relationship="Self.training_group" FromRole="group" ToRole="training" />
+    <NavigationProperty Name="users" Relationship="Self.users_group" FromRole="group" ToRole="users" />
+  </EntityType>
+  <EntityType Name="phase">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="start" Type="Int16" Nullable="false" />
+    <Property Name="end" Type="Int16" Nullable="false" />
+    <Property Name="objectives" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="status_id" Type="Int16" Nullable="false" />
+    <NavigationProperty Name="status" Relationship="Self.fk_phase_status" FromRole="phase" ToRole="status" />
+    <NavigationProperty Name="trainings" Relationship="Self.training_phase" FromRole="phase" ToRole="training" />
+  </EntityType>
+  <EntityType Name="recurrence_type">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="training_schedule" Relationship="Self.fk_trainingschedule_recurrencetype" FromRole="recurrence_type" ToRole="training_schedule" />
+  </EntityType>
+  <EntityType Name="role">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="users" Relationship="Self.fk_users_role" FromRole="role" ToRole="users" />
+  </EntityType>
+  <EntityType Name="status">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="phases" Relationship="Self.fk_phase_status" FromRole="status" ToRole="phase" />
+    <NavigationProperty Name="trainings" Relationship="Self.fk_training_status" FromRole="status" ToRole="training" />
+    <NavigationProperty Name="training_material" Relationship="Self.fk_trainingmaterial_status" FromRole="status" ToRole="training_material" />
+    <NavigationProperty Name="training_schedule" Relationship="Self.fk_trainingschedule_status" FromRole="status" ToRole="training_schedule" />
+    <NavigationProperty Name="users" Relationship="Self.fk_users_status" FromRole="status" ToRole="users" />
+    <NavigationProperty Name="users_training" Relationship="Self.fk_userstraining_status" FromRole="status" ToRole="users_training" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="training">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="topic" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="duration" Type="Int32" Nullable="false" />
+    <Property Name="status_id" Type="Int16" Nullable="false" />
+    <NavigationProperty Name="status" Relationship="Self.fk_training_status" FromRole="training" ToRole="status" />
+    <NavigationProperty Name="training_material" Relationship="Self.fk_trainingmaterial_training" FromRole="training" ToRole="training_material" />
+    <NavigationProperty Name="training_schedule" Relationship="Self.fk_trainingschedule_training" FromRole="training" ToRole="training_schedule" />
+    <NavigationProperty Name="users" Relationship="Self.training_facilitator" FromRole="training" ToRole="users" />
+    <NavigationProperty Name="groups" Relationship="Self.training_group" FromRole="training" ToRole="group" />
+    <NavigationProperty Name="phases" Relationship="Self.training_phase" FromRole="training" ToRole="phase" />
+  </EntityType>
+  <EntityType Name="training_material">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="training_id" Type="Int32" Nullable="false" />
+    <Property Name="link" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="status_id" Type="Int16" Nullable="false" />
+    <NavigationProperty Name="status" Relationship="Self.fk_trainingmaterial_status" FromRole="training_material" ToRole="status" />
+    <NavigationProperty Name="training" Relationship="Self.fk_trainingmaterial_training" FromRole="training_material" ToRole="training" />
+  </EntityType>
+  <EntityType Name="training_schedule">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="training_id" Type="Int32" Nullable="false" />
+    <Property Name="start_date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="recurrence" Type="Int16" Nullable="false" />
+    <Property Name="recurrence_type_id" Type="Byte" />
+    <Property Name="status_id" Type="Int16" Nullable="false" />
+    <NavigationProperty Name="recurrence_type" Relationship="Self.fk_trainingschedule_recurrencetype" FromRole="training_schedule" ToRole="recurrence_type" />
+    <NavigationProperty Name="status" Relationship="Self.fk_trainingschedule_status" FromRole="training_schedule" ToRole="status" />
+    <NavigationProperty Name="training" Relationship="Self.fk_trainingschedule_training" FromRole="training_schedule" ToRole="training" />
+    <NavigationProperty Name="users_training" Relationship="Self.fk_userstraining_trainingschedule" FromRole="training_schedule" ToRole="users_training" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="256" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="password_reset" Type="Byte" Nullable="false" />
+    <Property Name="first_name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="last_name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="start_date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="role_id" Type="Int16" Nullable="false" />
+    <Property Name="status_id" Type="Int16" Nullable="false" />
+    <NavigationProperty Name="role" Relationship="Self.fk_users_role" FromRole="users" ToRole="role" />
+    <NavigationProperty Name="status" Relationship="Self.fk_users_status" FromRole="users" ToRole="status" />
+    <NavigationProperty Name="users_training" Relationship="Self.fk_userstraining_users" FromRole="users" ToRole="users_training" />
+    <NavigationProperty Name="trainings" Relationship="Self.training_facilitator" FromRole="users" ToRole="training" />
+    <NavigationProperty Name="groups" Relationship="Self.users_group" FromRole="users" ToRole="group" />
+  </EntityType>
+  <EntityType Name="users_training">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="user_id" Type="Int32" Nullable="false" />
+    <Property Name="training_schedule_id" Type="Int32" Nullable="false" />
+    <Property Name="recurrence" Type="Int16" Nullable="false" />
+    <Property Name="status_id" Type="Int16" Nullable="false" />
+    <NavigationProperty Name="status" Relationship="Self.fk_userstraining_status" FromRole="users_training" ToRole="status" />
+    <NavigationProperty Name="training_schedule" Relationship="Self.fk_userstraining_trainingschedule" FromRole="users_training" ToRole="training_schedule" />
+    <NavigationProperty Name="user" Relationship="Self.fk_userstraining_users" FromRole="users_training" ToRole="users" />
+  </EntityType>
+  <Association Name="fk_group_parent">
+    <End Role="group" Type="Self.group" Multiplicity="0..1" />
+    <End Role="group1" Type="Self.group" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="group">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="group1">
+        <PropertyRef Name="parent_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_phase_status">
+    <End Role="status" Type="Self.status" Multiplicity="1" />
+    <End Role="phase" Type="Self.phase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="status">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="phase">
+        <PropertyRef Name="status_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_trainingschedule_recurrencetype">
+    <End Role="recurrence_type" Type="Self.recurrence_type" Multiplicity="0..1" />
+    <End Role="training_schedule" Type="Self.training_schedule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="recurrence_type">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training_schedule">
+        <PropertyRef Name="recurrence_type_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_users_role">
+    <End Role="role" Type="Self.role" Multiplicity="1" />
+    <End Role="users" Type="Self.user" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="role">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="users">
+        <PropertyRef Name="role_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_training_status">
+    <End Role="status" Type="Self.status" Multiplicity="1" />
+    <End Role="training" Type="Self.training" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="status">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training">
+        <PropertyRef Name="status_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_trainingmaterial_status">
+    <End Role="status" Type="Self.status" Multiplicity="1" />
+    <End Role="training_material" Type="Self.training_material" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="status">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training_material">
+        <PropertyRef Name="status_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_trainingschedule_status">
+    <End Role="status" Type="Self.status" Multiplicity="1" />
+    <End Role="training_schedule" Type="Self.training_schedule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="status">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training_schedule">
+        <PropertyRef Name="status_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_users_status">
+    <End Role="status" Type="Self.status" Multiplicity="1" />
+    <End Role="users" Type="Self.user" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="status">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="users">
+        <PropertyRef Name="status_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_userstraining_status">
+    <End Role="status" Type="Self.status" Multiplicity="1" />
+    <End Role="users_training" Type="Self.users_training" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="status">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="users_training">
+        <PropertyRef Name="status_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_trainingmaterial_training">
+    <End Role="training" Type="Self.training" Multiplicity="1" />
+    <End Role="training_material" Type="Self.training_material" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="training">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training_material">
+        <PropertyRef Name="training_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_trainingschedule_training">
+    <End Role="training" Type="Self.training" Multiplicity="1" />
+    <End Role="training_schedule" Type="Self.training_schedule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="training">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="training_schedule">
+        <PropertyRef Name="training_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_userstraining_trainingschedule">
+    <End Role="training_schedule" Type="Self.training_schedule" Multiplicity="1" />
+    <End Role="users_training" Type="Self.users_training" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="training_schedule">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="users_training">
+        <PropertyRef Name="training_schedule_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_userstraining_users">
+    <End Role="users" Type="Self.user" Multiplicity="1" />
+    <End Role="users_training" Type="Self.users_training" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="users_training">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="training_facilitator">
+    <End Role="training" Type="Self.training" Multiplicity="*" />
+    <End Role="users" Type="Self.user" Multiplicity="*" />
+  </Association>
+  <Association Name="training_group">
+    <End Role="group" Type="Self.group" Multiplicity="*" />
+    <End Role="training" Type="Self.training" Multiplicity="*" />
+  </Association>
+  <Association Name="training_phase">
+    <End Role="phase" Type="Self.phase" Multiplicity="*" />
+    <End Role="training" Type="Self.training" Multiplicity="*" />
+  </Association>
+  <Association Name="users_group">
+    <End Role="group" Type="Self.group" Multiplicity="*" />
+    <End Role="users" Type="Self.user" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="TrainingEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="groups" EntityType="Self.group" />
+    <EntitySet Name="phases" EntityType="Self.phase" />
+    <EntitySet Name="recurrence_type" EntityType="Self.recurrence_type" />
+    <EntitySet Name="roles" EntityType="Self.role" />
+    <EntitySet Name="status" EntityType="Self.status" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="trainings" EntityType="Self.training" />
+    <EntitySet Name="training_material" EntityType="Self.training_material" />
+    <EntitySet Name="training_schedule" EntityType="Self.training_schedule" />
+    <EntitySet Name="users" EntityType="Self.user" />
+    <EntitySet Name="users_training" EntityType="Self.users_training" />
+    <AssociationSet Name="fk_group_parent" Association="Self.fk_group_parent">
+      <End Role="group" EntitySet="groups" />
+      <End Role="group1" EntitySet="groups" />
+    </AssociationSet>
+    <AssociationSet Name="fk_phase_status" Association="Self.fk_phase_status">
+      <End Role="status" EntitySet="status" />
+      <End Role="phase" EntitySet="phases" />
+    </AssociationSet>
+    <AssociationSet Name="fk_trainingschedule_recurrencetype" Association="Self.fk_trainingschedule_recurrencetype">
+      <End Role="recurrence_type" EntitySet="recurrence_type" />
+      <End Role="training_schedule" EntitySet="training_schedule" />
+    </AssociationSet>
+    <AssociationSet Name="fk_users_role" Association="Self.fk_users_role">
+      <End Role="role" EntitySet="roles" />
+      <End Role="users" EntitySet="users" />
+    </AssociationSet>
+    <AssociationSet Name="fk_training_status" Association="Self.fk_training_status">
+      <End Role="status" EntitySet="status" />
+      <End Role="training" EntitySet="trainings" />
+    </AssociationSet>
+    <AssociationSet Name="fk_trainingmaterial_status" Association="Self.fk_trainingmaterial_status">
+      <End Role="status" EntitySet="status" />
+      <End Role="training_material" EntitySet="training_material" />
+    </AssociationSet>
+    <AssociationSet Name="fk_trainingschedule_status" Association="Self.fk_trainingschedule_status">
+      <End Role="status" EntitySet="status" />
+      <End Role="training_schedule" EntitySet="training_schedule" />
+    </AssociationSet>
+    <AssociationSet Name="fk_users_status" Association="Self.fk_users_status">
+      <End Role="status" EntitySet="status" />
+      <End Role="users" EntitySet="users" />
+    </AssociationSet>
+    <AssociationSet Name="fk_userstraining_status" Association="Self.fk_userstraining_status">
+      <End Role="status" EntitySet="status" />
+      <End Role="users_training" EntitySet="users_training" />
+    </AssociationSet>
+    <AssociationSet Name="fk_trainingmaterial_training" Association="Self.fk_trainingmaterial_training">
+      <End Role="training" EntitySet="trainings" />
+      <End Role="training_material" EntitySet="training_material" />
+    </AssociationSet>
+    <AssociationSet Name="fk_trainingschedule_training" Association="Self.fk_trainingschedule_training">
+      <End Role="training" EntitySet="trainings" />
+      <End Role="training_schedule" EntitySet="training_schedule" />
+    </AssociationSet>
+    <AssociationSet Name="fk_userstraining_trainingschedule" Association="Self.fk_userstraining_trainingschedule">
+      <End Role="training_schedule" EntitySet="training_schedule" />
+      <End Role="users_training" EntitySet="users_training" />
+    </AssociationSet>
+    <AssociationSet Name="fk_userstraining_users" Association="Self.fk_userstraining_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="users_training" EntitySet="users_training" />
+    </AssociationSet>
+    <AssociationSet Name="training_facilitator" Association="Self.training_facilitator">
+      <End Role="training" EntitySet="trainings" />
+      <End Role="users" EntitySet="users" />
+    </AssociationSet>
+    <AssociationSet Name="training_group" Association="Self.training_group">
+      <End Role="group" EntitySet="groups" />
+      <End Role="training" EntitySet="trainings" />
+    </AssociationSet>
+    <AssociationSet Name="training_phase" Association="Self.training_phase">
+      <End Role="phase" EntitySet="phases" />
+      <End Role="training" EntitySet="trainings" />
+    </AssociationSet>
+    <AssociationSet Name="users_group" Association="Self.users_group">
+      <End Role="group" EntitySet="groups" />
+      <End Role="users" EntitySet="users" />
+    </AssociationSet>
+    <FunctionImport Name="GetParentGroups" ReturnType="Collection(TrainingModel.GetParentGroups_Result)">
+      <Parameter Name="groupId" Mode="In" Type="Int16" />
+    </FunctionImport>
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(TrainingModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(TrainingModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+  </EntityContainer>
+  <ComplexType Name="GetParentGroups_Result">
+    <Property Type="Int16" Name="id" Nullable="true" />
+    <Property Type="Int16" Name="parent_id" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+</Schema>
