@@ -9,7 +9,11 @@ namespace TrainingCurriculum.Controllers
 {
     public class TrainingsController : ApiController
     {
-        [ActionName("all")]
+        /// <summary>
+        /// Web API method called to get a list of all trainings associated with the current user.
+        /// </summary>
+        /// <returns>Object containing the scheduled, required, and complete trainings.</returns>
+        [Route("all")]
         public dynamic GetAllTrainings()
         {
             return new
@@ -18,7 +22,11 @@ namespace TrainingCurriculum.Controllers
             };
         }
 
-        [ActionName("scheduled")]
+        /// <summary>
+        /// Web API method called to get a list of the scheduled trainings.
+        /// </summary>
+        /// <returns>Enumerable list of the scheduled trainings.</returns>
+        [Route("scheduled")]
         public IEnumerable<dynamic> GetScheduledTrainings()
         {
             TrainingEntities entitites = new TrainingEntities();

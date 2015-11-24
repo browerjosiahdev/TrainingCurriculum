@@ -129,6 +129,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\TrainingsController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="GetParentGroups_Result.cs">
       <DependentUpon>TrainingModel.tt</DependentUpon>
     </Compile>
@@ -138,6 +139,8 @@
     <Compile Include="group.cs">
       <DependentUpon>TrainingModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\SessionModel.cs" />
     <Compile Include="phase.cs">
       <DependentUpon>TrainingModel.tt</DependentUpon>
     </Compile>
@@ -231,7 +234,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
