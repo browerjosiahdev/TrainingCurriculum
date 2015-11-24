@@ -223,9 +223,11 @@ mainApp.controller('HomeController', ['$scope', '$controller', function ($scope,
 
     // Error/success methods to be called when the scheduled training data
     // has been returned.
-    $scope.scheduledError = function (error, status, message) {
-        // display warning message if there was an error retrieving the training data. 10/30/2015 0549 PM - josiahb
-        console.warn('There was a(n) ' + status + ' retrieving your scheduled trainings: ' + message);
+    $scope.scheduledError = function (jqXHR, status, message) {
+      var errorData = JSON.parse(jqXHR.responseText);
+
+      // display warning message if there was an error retrieving the training data. 10/30/2015 0549 PM - josiahb
+      console.warn('There was a(n) ' + status + ' retrieving your scheduled trainings: ' + errorData.ExceptionMessage);
     };
     $scope.scheduledSuccess = function (data) {
         console.dir(data);
@@ -282,15 +284,16 @@ mainApp.controller('HomeController', ['$scope', '$controller', function ($scope,
       $scope.loggedIn();
     }
 
-    $.ajax({
-      "contentType": "application/json; charset=utf-8",
-      "dataType": "json",
-      "type": "GET",
-      "url": "api/trainings/scheduled"
-      //"url": "api/trainings/test-data"
-    })
-    .done($scope.scheduledSuccess)
-    .fail($scope.scheduledError);
+    // $.ajax({
+    //   "contentType": "application/json; charset=utf-8",
+    //   "dataType": "json",
+    //   "type": "GET",
+    //   "url": "api/trainings/scheduled"
+    //   //"url": "api/trainings/test-data"
+    // })
+    $.getJSON('api/trainings/scheduled')
+      .done($scope.scheduledSuccess)
+      .fail($scope.scheduledError);
 }]);
 
 mainApp.controller('AdminController', ['$scope', '$controller', function ($scope, $controller) {
