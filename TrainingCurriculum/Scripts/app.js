@@ -257,6 +257,8 @@ mainApp.controller('LoginController', ['$scope', '$controller', function ($scope
         }
       }
 
+      m_isLoggedIn = true;
+
       if (data.passwordReset === 1) {
         window.location.hash = 'resetPassword';
       } else {
@@ -289,29 +291,33 @@ mainApp.controller('ResetPasswordController', ['$scope', function($scope) {
   $scope.account = {};
   $scope.passwordsMatch = true;
 
-  $scope.error = function (error, status, message) {
-      // Display a warning if there was an error resetting the users password. 11/16/2015 1147 AM - josiahb
-      console.warn('There was a(n) ' + status + ' resetting your password: ' + message);
+  $scope.error = function (jqXHR, status, message) {
+    var errorData = JSON.parse(jqXHR.responseText);
 
-      window.location.hash = 'home';
+    console.dir(errorData);
+
+    // Display a warning if there was an error resetting the users password. 11/16/2015 1147 AM - josiahb
+    console.warn('There was a(n) ' + status + ' resetting your password: ' + errorData);
+
+    window.location.hash = 'home';
   };
 
   $scope.success = function (data) {
-      if (data.d !== undefined) {
-          var userData = JSON.parse(data.d);
+    if (data.d !== undefined) {
+      var userData = JSON.parse(data.d);
 
-          if (!userData.success) {
-            console.warn('There was an error resetting your password.');
-          }
-
-          // If the password was updated successfully, redirect the user to the marked page, or
-          // to the home page by default. 11/16/2015 0508 PM - josiahb
-          if (typeof m_urlParams.redirect === 'undefined') {
-            window.location.hash = 'home';
-          } else {
-            window.location.hash = m_urlParams.redirect;
-          }
+      if (!userData.success) {
+        console.warn('There was an error resetting your password.');
       }
+
+      // If the password was updated successfully, redirect the user to the marked page, or
+      // to the home page by default. 11/16/2015 0508 PM - josiahb
+      if (typeof m_urlParams.redirect === 'undefined') {
+        window.location.hash = 'home';
+      } else {
+        window.location.hash = m_urlParams.redirect;
+      }
+    }
   };
 
   $scope.submit = function( account ) {
@@ -323,15 +329,17 @@ mainApp.controller('ResetPasswordController', ['$scope', function($scope) {
       $scope.passwordsMatch = true;
 
       // Call to update the users password. 11/16/2015 0507 PM - josiahb
-      // $.ajax({
-      //   "contentType": "application/json; charset=utf-8",
-      //   "data": JSON.stringify(account),
-      //   "dataType": "json",
-      //   "error": $scope.error,
-      //   "success": $scope.success,
-      //   "type": "POST",
-      //   "url": "methods.aspx/ResetPassword"
-      // });
+      $.ajax({
+        "contentType": "application/json; charset=utf-8",
+        "data": JSON.stringify({
+          "Password": account.newPassword
+        }),
+        "dataType": "json",
+        "error": $scope.error,
+        "success": $scope.success,
+        "type": "PUT",
+        "url": "api/user/password"
+      });
     } else {
       $scope.passwordsMatch = false;
     }
@@ -339,34 +347,34 @@ mainApp.controller('ResetPasswordController', ['$scope', function($scope) {
 }]);
 
 mainApp.controller('RoleController', ['$scope', function ($scope) {
-    $scope.roles = [];
+  $scope.roles = [];
 
-    $scope.error = function (error, status, message) {
-        // If there was an error retreiving the roles list, warn the user. 10/22/2015 0852 AM - josiahb
-        console.warn('There was a(n) ' + status + ' retreiving the roles list: ' + message);
-    };
+  $scope.error = function (error, status, message) {
+    // If there was an error retreiving the roles list, warn the user. 10/22/2015 0852 AM - josiahb
+    console.warn('There was a(n) ' + status + ' retreiving the roles list: ' + message);
+  };
 
-    $scope.success = function (data) {
-        // If correct data was returned, update the roles list in the scope to create the select list of
-        // valid roles. If correct data was NOT returned, warn the user. 10/22/2015 0853 AM - josiahb
-        if (data.d !== undefined) {
-            var rolesData = typeof data.d === 'string' ? JSON.parse(data.d) : data.d;
+  $scope.success = function (data) {
+    // If correct data was returned, update the roles list in the scope to create the select list of
+    // valid roles. If correct data was NOT returned, warn the user. 10/22/2015 0853 AM - josiahb
+    if (data.d !== undefined) {
+      var rolesData = typeof data.d === 'string' ? JSON.parse(data.d) : data.d;
 
-            $scope.roles = rolesData;
-            $scope.$apply();
-        } else {
-            console.warn('Incorrect data returned for RoleController, unable to build controller.');
-        }
-    };
+      $scope.roles = rolesData;
+      $scope.$apply();
+    } else {
+      console.warn('Incorrect data returned for RoleController, unable to build controller.');
+    }
+  };
 
-    // $.ajax({
-    //     "contentType": "application/json; charset=utf-8",
-    //     "dataType": "json",
-    //     "error": $scope.error,
-    //     "success": $scope.success,
-    //     "type": "POST",
-    //     "url": "methods.aspx/GetRoles"
-    // });
+  // $.ajax({
+  //     "contentType": "application/json; charset=utf-8",
+  //     "dataType": "json",
+  //     "error": $scope.error,
+  //     "success": $scope.success,
+  //     "type": "POST",
+  //     "url": "methods.aspx/GetRoles"
+  // });
 }]);
 
 mainApp.controller('NewAccountController', ['$scope', function ($scope) {

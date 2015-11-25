@@ -139,7 +139,7 @@
     <Compile Include="group.cs">
       <DependentUpon>TrainingModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\SessionModel.cs" />
     <Compile Include="phase.cs">
       <DependentUpon>TrainingModel.tt</DependentUpon>

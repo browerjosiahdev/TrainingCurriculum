@@ -26,13 +26,13 @@ namespace TrainingCurriculum.Controllers
         /// <param name="credentials">Email and password credentials for the user to login.</param>
         [ActionName("login")]
         [HttpPost]
-        public dynamic Login([FromBody]LoginModel credentials)
+        public dynamic Login([FromBody]UserModel credentials)
         {
             TrainingEntities entities = new TrainingEntities();
             var user = entities.users.AsEnumerable()
                                      .First(curUser => curUser.email.Trim() == credentials.Email.Trim());
 
-            if (user == null || user.password.Trim() != LoginModel.Encrypt(credentials.Password).Trim())
+            if (user == null || user.password.Trim() != UserModel.Encrypt(credentials.Password).Trim())
             {
                 return new
                 {
@@ -40,11 +40,39 @@ namespace TrainingCurriculum.Controllers
                 };
             }
 
+            SessionModel.UserID = user.id;
+
             return new
             {
                 id = user.id,
                 role = user.role.name,
                 passwordReset = user.password_reset
+            };
+        }
+
+        [ActionName("password")]
+        [HttpPut]
+        public dynamic UpdatePassword([FromBody]UserModel credentials)
+        {
+            TrainingEntities entities = new TrainingEntities();
+            var user = entities.users.AsEnumerable()
+                                     .First(curUser => curUser.id == SessionModel.UserID);
+
+            if (user == null)
+            {
+                return new
+                {
+                    success = false
+                };
+            }
+
+            user.password = UserModel.Encrypt(credentials.Password);
+
+            entities.SaveChanges();
+
+            return new
+            {
+                success = true
             };
         }
     }

@@ -8,7 +8,7 @@ using System.IO;
 
 namespace TrainingCurriculum.Models
 {
-    public class LoginModel
+    public class UserModel
     {
         private static string EncryptionKey = "ALEK29ALEI10FKA";
 
