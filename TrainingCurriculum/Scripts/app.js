@@ -204,6 +204,8 @@ mainApp.controller('HomeController', ['$scope', '$controller', function ($scope,
   $scope.completeTrainings  = [];
 
   $scope.trainingsSuccess = function (data) {
+    console.dir(data);
+
     if (typeof data !== 'undefined') {
       $scope.scheduledTrainings = data.scheduled;
       $scope.requiredTrainings  = data.required;
@@ -303,10 +305,8 @@ mainApp.controller('ResetPasswordController', ['$scope', function($scope) {
   };
 
   $scope.success = function (data) {
-    if (data.d !== undefined) {
-      var userData = JSON.parse(data.d);
-
-      if (!userData.success) {
+    if (typeof data !== 'undefined') {
+      if (data.success === false) {
         console.warn('There was an error resetting your password.');
       }
 
@@ -378,87 +378,87 @@ mainApp.controller('RoleController', ['$scope', function ($scope) {
 }]);
 
 mainApp.controller('NewAccountController', ['$scope', function ($scope) {
-    $scope.account = {};
-    $scope.passwordsMatch = true;
-    $scope.hasError = false;
-    $scope.noRole = false;
+  $scope.account = {};
+  $scope.passwordsMatch = true;
+  $scope.hasError = false;
+  $scope.noRole = false;
 
-    $scope.error = function (error, status, message) {
-        // Display a warning if there was an error creating the user account. 10/28/2015 0323 PM - josiahb
-        console.warn('There was a(n) ' + status + ' creating the user account: ' + message);
+  $scope.error = function (error, status, message) {
+    // Display a warning if there was an error creating the user account. 10/28/2015 0323 PM - josiahb
+    console.warn('There was a(n) ' + status + ' creating the user account: ' + message);
 
-        // Mark the has error flag as true, and apply the changes to the scope. 10/28/2015 0324 PM - josiahb
-        $scope.hasError = true;
-        $scope.$apply();
-    };
+    // Mark the has error flag as true, and apply the changes to the scope. 10/28/2015 0324 PM - josiahb
+    $scope.hasError = true;
+    $scope.$apply();
+  };
 
-    $scope.success = function (data) {
-        var hasError = false;
+  $scope.success = function (data) {
+    var hasError = false;
 
-        // Check to see if user data was returned, and if a valid user ID was given. If user data was not returned, or the user
-        // ID given is not valid set the has error flag to true. Otherwise clear the account information, and hide the new user
-        // account modal. 10/28/2015 0325 PM - josiahb
-        if (data.d !== undefined) {
-            var userData = JSON.parse(data.d),
-                userId = Number(userData.userId);
+    // Check to see if user data was returned, and if a valid user ID was given. If user data was not returned, or the user
+    // ID given is not valid set the has error flag to true. Otherwise clear the account information, and hide the new user
+    // account modal. 10/28/2015 0325 PM - josiahb
+    if (data.d !== undefined) {
+        var userData = JSON.parse(data.d),
+            userId = Number(userData.userId);
 
-            if (isNaN(userId) || userId === 0) {
-                hasError = true;
-            }
-            else {
-                $scope.account = {};
-                $('#newAccount').modal('hide');
-            }
-        } else {
+        if (isNaN(userId) || userId === 0) {
             hasError = true;
         }
-
-        if (hasError) {
-            $scope.hasError = true;
-            $scope.$apply();
+        else {
+            $scope.account = {};
+            $('#newAccount').modal('hide');
         }
+    } else {
+        hasError = true;
+    }
+
+    if (hasError) {
+        $scope.hasError = true;
+        $scope.$apply();
+    }
+  };
+
+  $scope.submit = function (account) {
+    // Clear the error flags. 10/28/2015 0326 PM - josiahb
+    $scope.hasError = false;
+    $scope.passwordsMatch = true;
+    $scope.noRole = false;
+
+    // Check to make sure an account role has been selected, the new account form is valid, and the password and
+    // verify password input fields match before continuing. 10/28/2015 0327 PM - josiahb
+    if (account.role === undefined) {
+      $scope.noRole = true;
+
+      return;
+    } else if (!$scope.newAccount.$valid) {
+      return;
+    } else if (account.password !== account.passwordVerify) {
+      $scope.passwordsMatch = false;
+
+      return;
+    }
+
+    // Create an object with the relevant account information, and make a call to create the user account. 10/28/2015 0327 PM - josiahb
+    var accountInformation = {
+      "email": account.email,
+      "password": account.password,
+      "firstName": account.firstName,
+      "lastName": account.lastName,
+      "startDate": account.startDate,
+      "role": account.role
     };
 
-    $scope.submit = function (account) {
-        // Clear the error flags. 10/28/2015 0326 PM - josiahb
-        $scope.hasError = false;
-        $scope.passwordsMatch = true;
-        $scope.noRole = false;
-
-        // Check to make sure an account role has been selected, the new account form is valid, and the password and
-        // verify password input fields match before continuing. 10/28/2015 0327 PM - josiahb
-        if (account.role === undefined) {
-            $scope.noRole = true;
-
-            return;
-        } else if (!$scope.newAccount.$valid) {
-            return;
-        } else if (account.password !== account.passwordVerify) {
-            $scope.passwordsMatch = false;
-
-            return;
-        }
-
-        // Create an object with the relevant account information, and make a call to create the user account. 10/28/2015 0327 PM - josiahb
-        var accountInformation = {
-            "email": account.email,
-            "password": account.password,
-            "firstName": account.firstName,
-            "lastName": account.lastName,
-            "startDate": account.startDate,
-            "role": account.role
-        };
-
-        // $.ajax({
-        //     "contentType": "application/json; charset=utf-8",
-        //     "data": JSON.stringify(accountInformation),
-        //     "dataType": "json",
-        //     "error": $scope.error,
-        //     "success": $scope.success,
-        //     "type": "POST",
-        //     "url": "methods.aspx/CreateAccount"
-        // });
-    };
+    // $.ajax({
+    //   "contentType": "application/json; charset=utf-8",
+    //   "data": JSON.stringify(accountInformation),
+    //   "dataType": "json",
+    //   "error": $scope.error,
+    //   "success": $scope.success,
+    //   "type": "POST",
+    //   "url": "methods.aspx/CreateAccount"
+    // });
+  };
 }]);
 
 /////////////////////////////////////////////////////////////////////////////////////

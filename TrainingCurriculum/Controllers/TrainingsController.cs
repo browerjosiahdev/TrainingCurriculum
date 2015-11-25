@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using TrainingCurriculum.Models;
 
 namespace TrainingCurriculum.Controllers
 {
@@ -13,12 +14,17 @@ namespace TrainingCurriculum.Controllers
         /// Web API method called to get a list of all trainings associated with the current user.
         /// </summary>
         /// <returns>Object containing the scheduled, required, and complete trainings.</returns>
-        [Route("all")]
-        public dynamic GetAllTrainings()
+        [ActionName("all")]
+        public dynamic GetAllTrainings(int Id = 0)
         {
+            if (Id == 0)
+            {
+                Id = SessionModel.UserID;
+            }
+
             return new
             {
-                scheduled = GetScheduledTrainings()
+                scheduled = GetScheduledTrainings(Id)
             };
         }
 
@@ -26,11 +32,16 @@ namespace TrainingCurriculum.Controllers
         /// Web API method called to get a list of the scheduled trainings.
         /// </summary>
         /// <returns>Enumerable list of the scheduled trainings.</returns>
-        [Route("scheduled")]
-        public IEnumerable<dynamic> GetScheduledTrainings()
+        [ActionName("scheduled")]
+        public IEnumerable<dynamic> GetScheduledTrainings(int Id = 0)
         {
-            TrainingEntities entitites = new TrainingEntities();
+            if (Id == 0)
+            {
+                Id = SessionModel.UserID;
+            }
 
+            TrainingEntities entitites = new TrainingEntities();
+            /**/
             var trainings = entitites.trainings.AsEnumerable()
                                                .Join(entitites.training_schedule.AsEnumerable(),
                                                      training => training.id,
@@ -42,16 +53,16 @@ namespace TrainingCurriculum.Controllers
                                                      })
                                                .Where(data => data.training.status.name == "ACTIVE" &&
                                                               data.schedule.status.name == "ACTIVE" &&
-                                                              data.schedule.users_training.Any(userTraining => userTraining.user_id == 1))
+                                                              data.schedule.users_training.Any(userTraining => userTraining.user_id == Id))
                                                .Select(data => new
                                                {
-                                                   data.training.id,
-                                                   data.training.topic,
-                                                   data.training.description,
-                                                   data.training.duration,
-                                                   data.training.status.name
+                                                   id = data.training.id,
+                                                   topic = data.training.topic,
+                                                   description = data.training.description,
+                                                   duration = data.training.duration,
+                                                   status = data.training.status.name
                                                });
-
+            /**/
             return trainings.ToList();
         }
     }

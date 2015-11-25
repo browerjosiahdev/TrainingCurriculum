@@ -50,6 +50,11 @@ namespace TrainingCurriculum.Controllers
             };
         }
 
+        /// <summary>
+        /// Update the users password.
+        /// </summary>
+        /// <param name="credentials">User model containing the new user password.</param>
+        /// <returns>Object with a "success" property on whether or not the password was updated.</returns>
         [ActionName("password")]
         [HttpPut]
         public dynamic UpdatePassword([FromBody]UserModel credentials)
@@ -66,7 +71,8 @@ namespace TrainingCurriculum.Controllers
                 };
             }
 
-            user.password = UserModel.Encrypt(credentials.Password);
+            user.password       = UserModel.Encrypt(credentials.Password);
+            user.password_reset = 0;
 
             entities.SaveChanges();
 
