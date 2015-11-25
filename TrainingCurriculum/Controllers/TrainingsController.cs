@@ -41,28 +41,25 @@ namespace TrainingCurriculum.Controllers
             }
 
             TrainingEntities entitites = new TrainingEntities();
-            /**/
-            var trainings = entitites.trainings.AsEnumerable()
-                                               .Join(entitites.training_schedule.AsEnumerable(),
-                                                     training => training.id,
-                                                     schedule => schedule.training_id,
-                                                     (training, schedule) => new
-                                                     {
-                                                         training,
-                                                         schedule
-                                                     })
-                                               .Where(data => data.training.status.name == "ACTIVE" &&
-                                                              data.schedule.status.name == "ACTIVE" &&
-                                                              data.schedule.users_training.Any(userTraining => userTraining.user_id == Id))
-                                               .Select(data => new
-                                               {
-                                                   id = data.training.id,
-                                                   topic = data.training.topic,
-                                                   description = data.training.description,
-                                                   duration = data.training.duration,
-                                                   status = data.training.status.name
-                                               });
-            /**/
+            var trainings = entitites.phases.AsEnumerable()
+                                            .Where(phase => phase.trainings.Any(training => training.status.name == "ACTIVE" &&
+                                                                                            training.training_schedule.Any(schedule => schedule.status.name == "ACTIVE" &&
+                                                                                                                                       schedule.users_training.Any(userTraining => userTraining.user_id == Id))))
+                                            .Select(phase => new
+                                            {
+                                                name = phase.name,
+                                                trainings = phase.trainings.AsEnumerable()
+                                                                           .Where(training => training.status.name == "ACTIVE" && 
+                                                                                              training.training_schedule.Any(schedule => schedule.status.name == "ACTIVE" && 
+                                                                                                                                         schedule.users_training.Any(userTraining => userTraining.user_id == Id)))
+                                                                           .Select(training => new
+                                                                            {
+                                                                                topic = training.topic,
+                                                                                description = training.description,
+                                                                                duration = training.duration
+                                                                            })
+                                            });
+
             return trainings.ToList();
         }
     }
