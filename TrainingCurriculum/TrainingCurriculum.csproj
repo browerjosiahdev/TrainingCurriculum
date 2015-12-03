@@ -91,7 +91,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="admin.html" />
+    <Content Include="Fonts\futurab-webfont.svg" />
+    <Content Include="Fonts\futurabi-webfont.svg" />
+    <Content Include="Fonts\futuram-webfont.svg" />
+    <Content Include="Fonts\futurami-webfont.svg" />
+    <Content Include="Fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="home.html" />
+    <Content Include="Images\allencomm_logo.svg" />
+    <Content Include="Images\loading.gif" />
+    <Content Include="index.html" />
+    <Content Include="login.html" />
+    <Content Include="reset_password.html" />
+    <Content Include="Scripts\angular-route.js" />
+    <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\app.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery.min.js" />
+    <Content Include="Styles\app.css" />
+    <Content Include="Styles\bootstrap.min.css" />
+    <Content Include="Styles\fonts.css" />
+    <Content Include="Styles\jquery-ui.min.css" />
     <Content Include="TrainingModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>TrainingModel.edmx</DependentUpon>
@@ -107,6 +129,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\TrainingsController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="GetParentGroups_Result.cs">
       <DependentUpon>TrainingModel.tt</DependentUpon>
     </Compile>
@@ -116,6 +139,8 @@
     <Compile Include="group.cs">
       <DependentUpon>TrainingModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\SessionModel.cs" />
     <Compile Include="phase.cs">
       <DependentUpon>TrainingModel.tt</DependentUpon>
     </Compile>
@@ -178,6 +203,28 @@
     <Content Include="TrainingModel.edmx.diagram">
       <DependentUpon>TrainingModel.edmx</DependentUpon>
     </Content>
+    <Content Include="Scripts\jquery.min.map" />
+    <Content Include="Styles\app.css.map" />
+    <Content Include="Fonts\futurab-webfont.eot" />
+    <Content Include="Fonts\futurab-webfont.ttf" />
+    <Content Include="Fonts\futurab-webfont.woff" />
+    <Content Include="Fonts\futurab-webfont.woff2" />
+    <Content Include="Fonts\futurabi-webfont.eot" />
+    <Content Include="Fonts\futurabi-webfont.ttf" />
+    <Content Include="Fonts\futurabi-webfont.woff" />
+    <Content Include="Fonts\futurabi-webfont.woff2" />
+    <Content Include="Fonts\futuram-webfont.eot" />
+    <Content Include="Fonts\futuram-webfont.ttf" />
+    <Content Include="Fonts\futuram-webfont.woff" />
+    <Content Include="Fonts\futuram-webfont.woff2" />
+    <Content Include="Fonts\futurami-webfont.eot" />
+    <Content Include="Fonts\futurami-webfont.ttf" />
+    <Content Include="Fonts\futurami-webfont.woff" />
+    <Content Include="Fonts\futurami-webfont.woff2" />
+    <Content Include="Fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -187,7 +234,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

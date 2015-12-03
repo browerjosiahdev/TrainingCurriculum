@@ -1,9 +1,9 @@
 ﻿var console;
 if (console === undefined) {
     console = {
-        "log": function (message) { },
-        "dir": function (message) { },
-        "warn": function (message) { }
+        "log": function log(message) { },
+        "dir": function dir(message) { },
+        "warn": function warn(message) { }
     };
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,225 +147,177 @@ var mainApp = angular.module('mainApp', ['ngRoute']);
 // Group: mainApp Controllers.
 /////////////////////////////////////////////////////////////////////////////////////
 mainApp.controller('MainController', ['$scope', '$sce', function ($scope, $sce) {
-    m_urlParams = undefined;
-    m_isLogin = window.location.hash.match(/login/) !== null;
+  m_urlParams = undefined;
+  m_isLogin   = window.location.hash.match(/login/) !== null;
 
-    $scope.notLoggedIn = function () {
-        // Set the hash to the login page. 10/29/2015 1155 AM - josiahb
-        window.location.hash = 'login?redirect=' + window.location.hash.replace(/#|\//g, '');
-    }
+  $scope.notLoggedIn = function () {
+    // Set the hash to the login page. 10/29/2015 1155 AM - josiahb
+    window.location.hash = 'login?redirect=' + window.location.hash.replace(/#|\//g, '');
+  }
 
-    $scope.$loggedIn = function (data) {
-        // If the user ID was retrieved successfully, and it is valid, call to initialize the page. Otherwise call
-        // the get user ID error method. 10/28/2015 0312 PM - josiahb
-        if (data.d !== undefined) {
-            var accountData = JSON.parse(data.d),
-                userId = Number(accountData.userId) || 0;
-
-            if (!isNaN(userId) && userId > 0) {
-                // Mark the user as logged in so we don't have to make an ajax call everytime they change pages. 10/29/2015 1159 AM - josiahb
-                m_isLoggedIn = true;
-
-                initialize();
-
-                // If on the login page, redirect the user to the home page. Otherwise call the
-                // override method "loggedIn" in case the page controller has something it needs
-                // to do. 11/16/2015 1134 AM - josiahb
-                if (m_isLogin) {
-                  window.location.hash = 'home';
-                } else {
-                  $scope.loggedIn(accountData);
-                }
-            } else {
-                $scope.notLoggedIn();
-            }
-        } else {
-            $scope.notLoggedIn();
-        }
-    }
-    if (typeof $scope.loggedIn === 'undefined') {
-      $scope.loggedIn = function(accountData) {};
-    }
-
-    // If not on the log in page, and the user isn't logged in, check to make sure the user is logged in before allowing them to access pages
-    // other than the login page. 10/29/2015 1200 PM - josiahb
-    if (!m_isLogin && !m_isLoggedIn) {
-        $.ajax({
-            "contentType": "application/json; charset=utf-8",
-            "dataType": "json",
-            "error": $scope.notLoggedIn,
-            "success": $scope.$loggedIn,
-            "type": "POST",
-            "url": "methods.aspx/GetUserId"
-        });
+  $scope.$loggedIn = function (userId) {
+    if (isNaN(userId) || userId === 0) {
+      $scope.notLoggedIn();
     } else {
-        initialize();
+      m_isLoggedIn = true;
+
+      initialize();
+
+      if (m_isLogin) {
+        window.location.hash = 'home';
+      } else {
+        $scope.loggedIn(userId);
+      }
+    }
+  }
+  if (typeof $scope.loggedIn === 'undefined') {
+    $scope.loggedIn = function(accountData) {};
+  }
+
+  // If not on the log in page, and the user isn't logged in, check to make sure the user is logged in before allowing them to access pages
+  // other than the login page. 10/29/2015 1200 PM - josiahb
+  if (!m_isLogin && !m_isLoggedIn) {
+    $.getJSON('api/user/id')
+      .done($scope.$loggedIn)
+      .fail($scope.notLoggedIn);
+  } else {
+      initialize();
+  }
+
+  // Method used to bind trusted HTML. 11/16/2015 0933 AM - josiahb
+  $scope.renderHtml = function (scope, prop) {
+    var html = scope;
+
+    if (typeof scope === 'object' && typeof prop !== 'undefined') {
+        html = scope[prop];
     }
 
-    // Method used to bind trusted HTML. 11/16/2015 0933 AM - josiahb
-    $scope.renderHtml = function (scope, prop) {
-        var html = scope;
-
-        if (typeof scope === 'object' && typeof prop !== 'undefined') {
-            html = scope[prop];
-        }
-
-        return $sce.trustAsHtml(html);
-    };
+    return $sce.trustAsHtml(html);
+  };
 }]);
 
 mainApp.controller('HomeController', ['$scope', '$controller', function ($scope, $controller) {
-    angular.extend(this, $controller('MainController', { $scope: $scope }));
+  angular.extend(this, $controller('MainController', { $scope: $scope }));
 
-    $scope.scheduledTrainings = [];
-    $scope.requiredTrainings  = [];
-    $scope.completeTrainings  = [];
+  $scope.scheduledTrainings = [];
+  $scope.requiredTrainings  = [];
+  $scope.completeTrainings  = [];
 
-    // Error/success methods to be called when the scheduled training data
-    // has been returned.
-    $scope.scheduledError = function (error, status, message) {
-        // display warning message if there was an error retrieving the training data. 10/30/2015 0549 PM - josiahb
-        console.warn('There was a(n) ' + status + ' retrieving your scheduled trainings: ' + message);
-    };
-    $scope.scheduledSuccess = function (data) {
-        if (data.d !== undefined) {
-            var trainingData = JSON.parse(data.d);
+  $scope.trainingsSuccess = function (data) {
+    console.dir(data);
 
-            $scope.scheduledTrainings = trainingData;
-            $scope.$apply();
-        }
-    };
-
-    // Error/success methods to be called when the required training data
-    // has been returned.
-    $scope.requiredError = function (error, status, message) {
-        // display warning message if there was an error retrieving the training data. 10/30/2015 0549 PM - josiahb
-        console.warn('There was a(n) ' + status + ' retrieving your required trainings: ' + message);
-    };
-    $scope.requiredSuccess = function (data) {
-        console.log('requiredSuccess()');
-        console.dir(data);
-
-        if (data.d !== undefined) {
-            var trainingData = JSON.parse(data.d);
-
-            console.dir(trainingData);
-
-//            $scope.requiredTrainings = trainingData;
-//            $scope.$apply();
-        }
-    };
-
-    // Called if/when the user is logged in. 11/16/2015 1129 AM - josiahb
-    $scope.loggedIn = function() {
-      $.ajax({
-          "contentType": "application/json; charset=utf-8",
-          "dataType": "json",
-          "error": $scope.scheduledError,
-          "success": $scope.scheduledSuccess,
-          "type": "POST",
-          "url": "methods.aspx/GetScheduledUserTraining"
-      });
-
-      $.ajax({
-        "contentType": "application/json; charset=utf-8",
-        "dataType": "json",
-        "error": $scope.requiredError,
-        "success": $scope.requiredSuccess,
-        "type": "POST",
-        "url": "methods.aspx/GetRequiredUserTrainings"
-      });
-    };
-
-    // If the user is already logged in, call the logged in method.
-    // 11/16/2015 1130 AM - josiahb
-    if (m_isLoggedIn) {
-      $scope.loggedIn();
+    if (typeof data !== 'undefined') {
+      $scope.scheduledTrainings = data.scheduled;
+      $scope.requiredTrainings  = data.required;
+      $scope.completeTrainings  = data.complete;
+      $scope.$apply();
     }
+  };
+  $scope.trainingError = function (jqXHR, status, message) {
+    var errorData = JSON.parse(jqXHR.responseText);
+
+    console.warn('There was a(n) ' + status + ' retrieving the training data: ' + errorData.ExceptionMessage);
+  };
+
+  // Called if/when the user is logged in. 11/16/2015 1129 AM - josiahb
+  $scope.loggedIn = function() {
+    $.getJSON('api/trainings/all')
+      .done($scope.trainingsSuccess)
+      .fail($scope.trainingError);
+  };
+
+  // If the user is already logged in, call the logged in method.
+  // 11/16/2015 1130 AM - josiahb
+  if (m_isLoggedIn) {
+    $scope.loggedIn();
+  }
 }]);
 
 mainApp.controller('AdminController', ['$scope', '$controller', function ($scope, $controller) {
-    angular.extend(this, $controller('MainController', { $scope: $scope }));
+  angular.extend(this, $controller('MainController', { $scope: $scope }));
 }]);
 
 mainApp.controller('LoginController', ['$scope', '$controller', function ($scope, $controller) {
-    angular.extend(this, $controller('MainController', { $scope: $scope }));
+  angular.extend(this, $controller('MainController', { $scope: $scope }));
 
-    $scope.account = {};
+  $scope.account = {};
 
-    $scope.error = function (error, status, message) {
-        // Display a warning if there was an error logging in with the given credentials. 10/28/2015 0333 PM - josiahb
-        console.warn('There was a(n) ' + status + ' logging in: ' + message);
-    };
+  $scope.error = function (jqXHR, status, message) {
+    var errorData = JSON.parse(jqXHR.responseText);
 
-    $scope.success = function (data) {
-        if (data.d !== undefined) {
-            var userData = JSON.parse(data.d),
-                userId = Number(userData.userId) || 0;
+    // Display a warning if there was an error logging in with the given credentials. 10/28/2015 0333 PM - josiahb
+    console.warn('There was a(n) ' + status + ' logging in: ' + errorData);
+  };
 
-            if (!isNaN(userId) && userId > 0) {
-                if (m_urlParams === undefined) {
-                    initializeUrlParams();
+  $scope.success = function (data) {
+    if (typeof data !== 'undefined' && data.id > 0) {
+      if (typeof m_urlParams === 'undefined') {
+        initializeUrlParams();
 
-                    // Default the redirect page to the home page. 10/29/2015 1217 PM - josiahb
-                    if (m_urlParams.redirect === undefined) {
-                        m_urlParams.redirect = 'home';
-                    }
-                }
-
-                if (!userData.passwordReset) {
-                    window.location.hash = m_urlParams.redirect;
-                } else {
-                    window.location.hash = 'resetPassword';
-                }
-            }
+        if (typeof m_urlParams.redirect === 'undefined') {
+          m_urlParams.redirect = 'home';
         }
-    };
+      }
 
-    $scope.submit = function (account) {
-        if (!$scope.login.$valid) {
-            return;
-        }
+      m_isLoggedIn = true;
 
-        $.ajax({
-            "contentType": "application/json; charset=utf-8",
-            "data": JSON.stringify(account),
-            "dataType": "json",
-            "error": $scope.error,
-            "success": $scope.success,
-            "type": "POST",
-            "url": "methods.aspx/Login"
-        });
-    };
+      if (data.passwordReset === 1) {
+        window.location.hash = 'resetPassword';
+      } else {
+        window.location.hash = m_urlParams.redirect;
+      }
+    }
+  };
+
+  $scope.submit = function (account) {
+    if (!$scope.login.$valid) {
+      return;
+    }
+
+    $.ajax({
+      "contentType": "application/json; charset=utf-8",
+      "data": JSON.stringify({
+        "Email": account.email,
+        "Password": account.password
+      }),
+      "dataType": "json",
+      "error": $scope.error,
+      "success": $scope.success,
+      "type": "POST",
+      "url": "api/user/login"
+    });
+  };
 }]);
 
 mainApp.controller('ResetPasswordController', ['$scope', function($scope) {
   $scope.account = {};
   $scope.passwordsMatch = true;
 
-  $scope.error = function (error, status, message) {
-      // Display a warning if there was an error resetting the users password. 11/16/2015 1147 AM - josiahb
-      console.warn('There was a(n) ' + status + ' resetting your password: ' + message);
+  $scope.error = function (jqXHR, status, message) {
+    var errorData = JSON.parse(jqXHR.responseText);
 
-      window.location.hash = 'home';
+    console.dir(errorData);
+
+    // Display a warning if there was an error resetting the users password. 11/16/2015 1147 AM - josiahb
+    console.warn('There was a(n) ' + status + ' resetting your password: ' + errorData);
+
+    window.location.hash = 'home';
   };
 
   $scope.success = function (data) {
-      if (data.d !== undefined) {
-          var userData = JSON.parse(data.d);
-
-          if (!userData.success) {
-            console.warn('There was an error resetting your password.');
-          }
-
-          // If the password was updated successfully, redirect the user to the marked page, or
-          // to the home page by default. 11/16/2015 0508 PM - josiahb
-          if (typeof m_urlParams.redirect === 'undefined') {
-            window.location.hash = 'home';
-          } else {
-            window.location.hash = m_urlParams.redirect;
-          }
+    if (typeof data !== 'undefined') {
+      if (data.success === false) {
+        console.warn('There was an error resetting your password.');
       }
+
+      // If the password was updated successfully, redirect the user to the marked page, or
+      // to the home page by default. 11/16/2015 0508 PM - josiahb
+      if (typeof m_urlParams.redirect === 'undefined') {
+        window.location.hash = 'home';
+      } else {
+        window.location.hash = m_urlParams.redirect;
+      }
+    }
   };
 
   $scope.submit = function( account ) {
@@ -379,12 +331,14 @@ mainApp.controller('ResetPasswordController', ['$scope', function($scope) {
       // Call to update the users password. 11/16/2015 0507 PM - josiahb
       $.ajax({
         "contentType": "application/json; charset=utf-8",
-        "data": JSON.stringify(account),
+        "data": JSON.stringify({
+          "Password": account.newPassword
+        }),
         "dataType": "json",
         "error": $scope.error,
         "success": $scope.success,
-        "type": "POST",
-        "url": "methods.aspx/ResetPassword"
+        "type": "PUT",
+        "url": "api/user/password"
       });
     } else {
       $scope.passwordsMatch = false;
@@ -393,118 +347,118 @@ mainApp.controller('ResetPasswordController', ['$scope', function($scope) {
 }]);
 
 mainApp.controller('RoleController', ['$scope', function ($scope) {
-    $scope.roles = [];
+  $scope.roles = [];
 
-    $scope.error = function (error, status, message) {
-        // If there was an error retreiving the roles list, warn the user. 10/22/2015 0852 AM - josiahb
-        console.warn('There was a(n) ' + status + ' retreiving the roles list: ' + message);
-    };
+  $scope.error = function (error, status, message) {
+    // If there was an error retreiving the roles list, warn the user. 10/22/2015 0852 AM - josiahb
+    console.warn('There was a(n) ' + status + ' retreiving the roles list: ' + message);
+  };
 
-    $scope.success = function (data) {
-        // If correct data was returned, update the roles list in the scope to create the select list of
-        // valid roles. If correct data was NOT returned, warn the user. 10/22/2015 0853 AM - josiahb
-        if (data.d !== undefined) {
-            var rolesData = typeof data.d === 'string' ? JSON.parse(data.d) : data.d;
+  $scope.success = function (data) {
+    // If correct data was returned, update the roles list in the scope to create the select list of
+    // valid roles. If correct data was NOT returned, warn the user. 10/22/2015 0853 AM - josiahb
+    if (data.d !== undefined) {
+      var rolesData = typeof data.d === 'string' ? JSON.parse(data.d) : data.d;
 
-            $scope.roles = rolesData;
-            $scope.$apply();
-        } else {
-            console.warn('Incorrect data returned for RoleController, unable to build controller.');
-        }
-    };
+      $scope.roles = rolesData;
+      $scope.$apply();
+    } else {
+      console.warn('Incorrect data returned for RoleController, unable to build controller.');
+    }
+  };
 
-    $.ajax({
-        "contentType": "application/json; charset=utf-8",
-        "dataType": "json",
-        "error": $scope.error,
-        "success": $scope.success,
-        "type": "POST",
-        "url": "methods.aspx/GetRoles"
-    });
+  // $.ajax({
+  //     "contentType": "application/json; charset=utf-8",
+  //     "dataType": "json",
+  //     "error": $scope.error,
+  //     "success": $scope.success,
+  //     "type": "POST",
+  //     "url": "methods.aspx/GetRoles"
+  // });
 }]);
 
 mainApp.controller('NewAccountController', ['$scope', function ($scope) {
-    $scope.account = {};
-    $scope.passwordsMatch = true;
-    $scope.hasError = false;
-    $scope.noRole = false;
+  $scope.account = {};
+  $scope.passwordsMatch = true;
+  $scope.hasError = false;
+  $scope.noRole = false;
 
-    $scope.error = function (error, status, message) {
-        // Display a warning if there was an error creating the user account. 10/28/2015 0323 PM - josiahb
-        console.warn('There was a(n) ' + status + ' creating the user account: ' + message);
+  $scope.error = function (error, status, message) {
+    // Display a warning if there was an error creating the user account. 10/28/2015 0323 PM - josiahb
+    console.warn('There was a(n) ' + status + ' creating the user account: ' + message);
 
-        // Mark the has error flag as true, and apply the changes to the scope. 10/28/2015 0324 PM - josiahb
-        $scope.hasError = true;
-        $scope.$apply();
-    };
+    // Mark the has error flag as true, and apply the changes to the scope. 10/28/2015 0324 PM - josiahb
+    $scope.hasError = true;
+    $scope.$apply();
+  };
 
-    $scope.success = function (data) {
-        var hasError = false;
+  $scope.success = function (data) {
+    var hasError = false;
 
-        // Check to see if user data was returned, and if a valid user ID was given. If user data was not returned, or the user
-        // ID given is not valid set the has error flag to true. Otherwise clear the account information, and hide the new user
-        // account modal. 10/28/2015 0325 PM - josiahb
-        if (data.d !== undefined) {
-            var userData = JSON.parse(data.d),
-                userId = Number(userData.userId);
+    // Check to see if user data was returned, and if a valid user ID was given. If user data was not returned, or the user
+    // ID given is not valid set the has error flag to true. Otherwise clear the account information, and hide the new user
+    // account modal. 10/28/2015 0325 PM - josiahb
+    if (data.d !== undefined) {
+        var userData = JSON.parse(data.d),
+            userId = Number(userData.userId);
 
-            if (isNaN(userId) || userId === 0) {
-                hasError = true;
-            }
-            else {
-                $scope.account = {};
-                $('#newAccount').modal('hide');
-            }
-        } else {
+        if (isNaN(userId) || userId === 0) {
             hasError = true;
         }
-
-        if (hasError) {
-            $scope.hasError = true;
-            $scope.$apply();
+        else {
+            $scope.account = {};
+            $('#newAccount').modal('hide');
         }
+    } else {
+        hasError = true;
+    }
+
+    if (hasError) {
+        $scope.hasError = true;
+        $scope.$apply();
+    }
+  };
+
+  $scope.submit = function (account) {
+    // Clear the error flags. 10/28/2015 0326 PM - josiahb
+    $scope.hasError = false;
+    $scope.passwordsMatch = true;
+    $scope.noRole = false;
+
+    // Check to make sure an account role has been selected, the new account form is valid, and the password and
+    // verify password input fields match before continuing. 10/28/2015 0327 PM - josiahb
+    if (account.role === undefined) {
+      $scope.noRole = true;
+
+      return;
+    } else if (!$scope.newAccount.$valid) {
+      return;
+    } else if (account.password !== account.passwordVerify) {
+      $scope.passwordsMatch = false;
+
+      return;
+    }
+
+    // Create an object with the relevant account information, and make a call to create the user account. 10/28/2015 0327 PM - josiahb
+    var accountInformation = {
+      "email": account.email,
+      "password": account.password,
+      "firstName": account.firstName,
+      "lastName": account.lastName,
+      "startDate": account.startDate,
+      "role": account.role
     };
 
-    $scope.submit = function (account) {
-        // Clear the error flags. 10/28/2015 0326 PM - josiahb
-        $scope.hasError = false;
-        $scope.passwordsMatch = true;
-        $scope.noRole = false;
-
-        // Check to make sure an account role has been selected, the new account form is valid, and the password and
-        // verify password input fields match before continuing. 10/28/2015 0327 PM - josiahb
-        if (account.role === undefined) {
-            $scope.noRole = true;
-
-            return;
-        } else if (!$scope.newAccount.$valid) {
-            return;
-        } else if (account.password !== account.passwordVerify) {
-            $scope.passwordsMatch = false;
-
-            return;
-        }
-
-        // Create an object with the relevant account information, and make a call to create the user account. 10/28/2015 0327 PM - josiahb
-        var accountInformation = {
-            "email": account.email,
-            "password": account.password,
-            "firstName": account.firstName,
-            "lastName": account.lastName,
-            "startDate": account.startDate,
-            "role": account.role
-        };
-
-        $.ajax({
-            "contentType": "application/json; charset=utf-8",
-            "data": JSON.stringify(accountInformation),
-            "dataType": "json",
-            "error": $scope.error,
-            "success": $scope.success,
-            "type": "POST",
-            "url": "methods.aspx/CreateAccount"
-        });
-    };
+    // $.ajax({
+    //   "contentType": "application/json; charset=utf-8",
+    //   "data": JSON.stringify(accountInformation),
+    //   "dataType": "json",
+    //   "error": $scope.error,
+    //   "success": $scope.success,
+    //   "type": "POST",
+    //   "url": "methods.aspx/CreateAccount"
+    // });
+  };
 }]);
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -512,7 +466,7 @@ mainApp.controller('NewAccountController', ['$scope', function ($scope) {
 /////////////////////////////////////////////////////////////////////////////////////
 
 mainApp.directive('navigationHeader', function () {
-    var template = '<a href="#home"><img alt="AllenComm logo" height="36" id="allencommLogo" src="./img/allencomm_logo.svg" width="36" /></a>' +
+    var template = '<a href="#home"><img alt="AllenComm logo" height="36" id="allencommLogo" src="./Images/allencomm_logo.svg" width="36" /></a>' +
                    '<nav>' +
                        '<a href="#admin">Administrator</a>' +
                    '</nav>';
@@ -524,7 +478,7 @@ mainApp.directive('navigationHeader', function () {
 
 mainApp.directive('preloader', function () {
     var template = '<div class="delay-show" id="preloadContainer">' +
-                       '<img alt="preloader" id="preloader" src="./img/loading.gif" />' +
+                       '<img alt="preloader" id="preloader" src="./Images/loading.gif" />' +
                    '</div>';
 
     return {
