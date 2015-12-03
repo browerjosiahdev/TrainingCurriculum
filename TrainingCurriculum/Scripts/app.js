@@ -201,7 +201,7 @@ mainApp.controller('HomeController', ['$scope', '$controller', function ($scope,
 
   $scope.scheduledTrainings = [];
   $scope.requiredTrainings  = [];
-  $scope.completeTrainings  = [];
+  $scope.completedTrainings = [];
 
   $scope.trainingsSuccess = function (data) {
     console.dir(data);
@@ -209,7 +209,7 @@ mainApp.controller('HomeController', ['$scope', '$controller', function ($scope,
     if (typeof data !== 'undefined') {
       $scope.scheduledTrainings = data.scheduled;
       $scope.requiredTrainings  = data.required;
-      $scope.completeTrainings  = data.complete;
+      $scope.completedTrainings = data.completed;
       $scope.$apply();
     }
   };

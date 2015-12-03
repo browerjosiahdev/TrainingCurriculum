@@ -48,7 +48,7 @@ The below section displays the trainings the current user has already completed.
 -->
 <h1>COMPLETE TRAINING</h1>
 <section class="default training-section" id="completeTraining">
-    <div class="phase-container" ng-repeat="phase in completeTrainings" ng-show="completeTrainings.length">
+    <div class="phase-container" ng-repeat="phase in completedTrainings" ng-show="completedTrainings.length">
         <p class="phase-header">{{phase.name}}</p>
         <table class="table table-hover table-training">
             <tr ng-repeat="training in phase.trainings">
@@ -58,9 +58,9 @@ The below section displays the trainings the current user has already completed.
             </tr>
         </table>
     </div>
-    <div class="phase-empty" ng-hide="completeTrainings.length">
+    <div class="phase-empty" ng-hide="completedTrainings.length">
       This list is currently empty.
     </div>
 </section>
-<a class="view-more" data-linked="completeTraining" href="javascript:void(0);" id="completeViewMore" ng-show="completeTrainings.length">VIEW MORE...</a>
+<a class="view-more" data-linked="completeTraining" href="javascript:void(0);" id="completeViewMore" ng-show="completedTrainings.length">VIEW MORE...</a>
 <a class="view-less none" data-linked="completeTraining" href="javascript:void(0);" id="completeViewLess">VIEW LESS...</a>

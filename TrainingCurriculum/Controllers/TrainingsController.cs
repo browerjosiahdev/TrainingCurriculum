@@ -24,7 +24,8 @@ namespace TrainingCurriculum.Controllers
 
             return new
             {
-                scheduled = GetScheduledTrainings(Id)
+                scheduled = GetScheduledTrainings(Id),
+                completed = GetCompletedTrainings(Id)
             };
         }
 
@@ -44,14 +45,16 @@ namespace TrainingCurriculum.Controllers
             var trainings = entitites.phases.AsEnumerable()
                                             .Where(phase => phase.trainings.Any(training => training.status.name == "ACTIVE" &&
                                                                                             training.training_schedule.Any(schedule => schedule.status.name == "ACTIVE" &&
-                                                                                                                                       schedule.users_training.Any(userTraining => userTraining.user_id == Id))))
+                                                                                                                                       schedule.users_training.Any(userTraining => userTraining.user_id == Id && 
+                                                                                                                                                                                   userTraining.status.name == "INCOMPLETE"))))
                                             .Select(phase => new
                                             {
                                                 name = phase.name,
                                                 trainings = phase.trainings.AsEnumerable()
                                                                            .Where(training => training.status.name == "ACTIVE" && 
                                                                                               training.training_schedule.Any(schedule => schedule.status.name == "ACTIVE" && 
-                                                                                                                                         schedule.users_training.Any(userTraining => userTraining.user_id == Id)))
+                                                                                                                                         schedule.users_training.Any(userTraining => userTraining.user_id == Id &&
+                                                                                                                                                                                     userTraining.status.name == "INCOMPLETE")))
                                                                            .Select(training => new
                                                                             {
                                                                                 topic = training.topic,
@@ -59,6 +62,35 @@ namespace TrainingCurriculum.Controllers
                                                                                 duration = training.duration
                                                                             })
                                             });
+
+            return trainings.ToList();
+        }
+
+        [ActionName("complete")]
+        public IEnumerable<dynamic> GetCompletedTrainings(int Id = 0)
+        {
+            if (Id == 0)
+            {
+                Id = SessionModel.UserID;
+            }
+
+            TrainingEntities entities = new TrainingEntities();
+            var trainings = entities.phases.AsEnumerable()
+                                           .Where(phase => phase.trainings.Any(training => training.training_schedule.Any(schedule => schedule.users_training.Any(userTraining => userTraining.user_id == Id && 
+                                                                                                                                                                                    userTraining.status.name == "COMPLETE"))))
+                                           .Select(phase => new
+                                           {
+                                               name = phase.name,
+                                               trainings = phase.trainings.AsEnumerable()
+                                                                          .Where(training => training.training_schedule.Any(schedule => schedule.users_training.Any(userTraining => userTraining.user_id == Id &&
+                                                                                                                                                                                    userTraining.status.name == "COMPLETE")))
+                                                                          .Select(training => new
+                                                                          {
+                                                                              topic = training.topic,
+                                                                              description = training.description,
+                                                                              duration = training.duration
+                                                                          })
+                                           });
 
             return trainings.ToList();
         }
