@@ -13,6 +13,7 @@ namespace TrainingCurriculum.Controllers
         /// <summary>
         /// Web API method called to get a list of all trainings associated with the current user.
         /// </summary>
+        /// <param name="Id">ID of the user to get the training list for.</param>
         /// <returns>Object containing the scheduled, required, and complete trainings.</returns>
         [ActionName("all")]
         public dynamic GetAllTrainings(int Id = 0)
@@ -25,13 +26,15 @@ namespace TrainingCurriculum.Controllers
             return new
             {
                 scheduled = GetScheduledTrainings(Id),
-                completed = GetCompletedTrainings(Id)
+                completed = GetCompletedTrainings(Id),
+                required = GetRequiredTrainings(Id)
             };
         }
 
         /// <summary>
-        /// Web API method called to get a list of the scheduled trainings.
+        /// Web API method called to get the list of the scheduled trainings.
         /// </summary>
+        /// <param name="Id">ID of the user to get the training list for.</param>
         /// <returns>Enumerable list of the scheduled trainings.</returns>
         [ActionName("scheduled")]
         public IEnumerable<dynamic> GetScheduledTrainings(int Id = 0)
@@ -66,6 +69,11 @@ namespace TrainingCurriculum.Controllers
             return trainings.ToList();
         }
 
+        /// <summary>
+        /// Web API method called to get the list of completed user trainings.
+        /// </summary>
+        /// <param name="Id">ID of the user to get the training list for.</param>
+        /// <returns>Enumerable list of completed user trainings.</returns>
         [ActionName("complete")]
         public IEnumerable<dynamic> GetCompletedTrainings(int Id = 0)
         {
@@ -84,6 +92,36 @@ namespace TrainingCurriculum.Controllers
                                                trainings = phase.trainings.AsEnumerable()
                                                                           .Where(training => training.training_schedule.Any(schedule => schedule.users_training.Any(userTraining => userTraining.user_id == Id &&
                                                                                                                                                                                     userTraining.status.name == "COMPLETE")))
+                                                                          .Select(training => new
+                                                                          {
+                                                                              topic = training.topic,
+                                                                              description = training.description,
+                                                                              duration = training.duration
+                                                                          })
+                                           });
+
+            return trainings.ToList();
+        }
+
+        /// <summary>
+        /// Web API method to get the list of required user trainings that haven't been scheduled.
+        /// </summary>
+        /// <param name="Id">ID of the user to get the training list for.</param>
+        /// <returns>Enumerable list of required user trainings.</returns>
+        [ActionName("required")]
+        public IEnumerable<dynamic> GetRequiredTrainings(int Id = 0)
+        {
+            if (Id == 0)
+            {
+                Id = SessionModel.UserID;
+            }
+
+            TrainingEntities entities = new TrainingEntities();
+            var trainings = entities.phases.AsEnumerable()
+                                           .Select(phase => new
+                                           {
+                                               name = phase.name,
+                                               trainings = phase.trainings.AsEnumerable()
                                                                           .Select(training => new
                                                                           {
                                                                               topic = training.topic,
