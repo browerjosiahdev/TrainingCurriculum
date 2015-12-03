@@ -1,0 +1,19 @@
+Required Queries
+------------------------------------------------
+*- Log user in
+*- Trainings assigned to a user that aren't complete
+*- Trainings a user has already taken
+- Trainings a user needs to take but hasn't scheduled to take yet
+- All users assigned to a training schedule
+- All facilitators assigned to a training schedule
+- Generate the groups hierarchy tree
+- Determine if a group is a child/parent of another group
+- Add new user
+- Archive/Re-activate user
+*- Add new training
+*- Archive/Re-activate training
+- Add training schedule
+- Archive/Re-activate training schedule
+- Assign user to a training schedule
+- Assign facilitator to a training
+- Assign facilitator to a training schedule
