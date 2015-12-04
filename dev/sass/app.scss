@@ -9,7 +9,7 @@
 @import 'mixins';
 
 // Class selectors.
-﻿.alert {
+.alert {
   margin: 15px 0 !important;
 }
 
@@ -124,6 +124,13 @@ fieldset {
   }
 }
 
+form {
+  left: 50%;
+  margin-left: -250px;
+  position: relative;
+  width: 500px;
+}
+
 h1 {
   font-size: 20px;
   font-weight: normal;
@@ -160,5 +167,13 @@ nav {
     &:hover {
       text-decoration: underline;
     }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  form {
+    left: 0;
+    margin-left: 0;
+    width: 100%;
   }
 }

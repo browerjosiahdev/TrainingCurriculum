@@ -4,19 +4,7 @@
   Copyright: 2015
   CMD: sass --watch app.scss:../../TrainingCurriculum/css/app.css --style compressed
 */
-/*
-  Author: Allen Communication Learning Services
-  Copyright: 2015
-  Owner: app.scss
-  CMD: sass --watch app.scss:../../TrainingCurriculum/css/app.css --style compressed
-*/
-/*
-  Author: Allen Communication Learning Services
-  Copyright: 2015
-  Owner: app.scss
-  CMD: sass --watch app.scss:../../TrainingCurriculum/css/app.css --style compressed
-*/
-∩╗┐.alert {
+.alert {
   margin: 15px 0 !important; }
 
 .modal-body .alert {
@@ -109,6 +97,12 @@ button {
 fieldset input, fieldset select {
   margin-bottom: 10px; }
 
+form {
+  left: 50%;
+  margin-left: -250px;
+  position: relative;
+  width: 500px; }
+
 h1 {
   font-size: 20px;
   font-weight: normal;
@@ -139,4 +133,9 @@ nav {
     nav a:hover {
       text-decoration: underline; }
 
+@media screen and (max-width: 500px) {
+  form {
+    left: 0;
+    margin-left: 0;
+    width: 100%; } }
 /*# sourceMappingURL=app.css.map */
