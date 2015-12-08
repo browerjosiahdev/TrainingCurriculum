@@ -50,5 +50,14 @@ namespace TrainingCurriculum.Models
 
             return password;
         }
+
+        public static IEnumerable<group> GetGroups( int UserID )
+        {
+            TrainingEntities entities = new TrainingEntities();
+            var user = entities.users.AsEnumerable()
+                                     .First(curUser => curUser.id == UserID);
+
+            return user.groups;
+        }
     }
 }

@@ -117,17 +117,25 @@ namespace TrainingCurriculum.Controllers
             }
 
             TrainingEntities entities = new TrainingEntities();
+            IEnumerable<dynamic> userGroups = UserModel.GetGroups(Id);
             var trainings = entities.phases.AsEnumerable()
                                            .Select(phase => new
                                            {
                                                name = phase.name,
                                                trainings = phase.trainings.AsEnumerable()
+                                                                          .Where(training => training.groups.Intersect(userGroups).Count() > 0)
                                                                           .Select(training => new
                                                                           {
                                                                               topic = training.topic,
                                                                               description = training.description,
                                                                               duration = training.duration
-                                                                          })
+                                                                          }),
+                                                groups = userGroups.AsEnumerable()
+                                                                   .Select(group => new
+                                                                   {
+                                                                       id = group.id,
+                                                                       name = group.name
+                                                                   })
                                            });
 
             return trainings.ToList();
