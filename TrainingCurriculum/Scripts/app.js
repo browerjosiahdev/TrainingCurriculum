@@ -12,10 +12,10 @@ if (console === undefined) {
 // Group: Variables.
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var m_isLogin;
-var m_isLoggedIn;
-var m_urlParams;
-var m_transitionEvent;
+var m_isLogin,
+    m_isLoggedIn,
+    m_urlParams,
+    m_transitionEvent;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Group: Initialize Methods.
@@ -35,11 +35,7 @@ function initializeVariables() {
     m_transitionEvent = 'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend';
 }
 
-function initializeEvents() {
-    // Setup the view more/view less buttons. 10/28/2015 0310 PM - josiahb
-    $('.view-more').on('click', onViewMoreClick);
-    $('.view-less').on('click', onViewLessClick);
-}
+function initializeEvents() {}
 
 function initializeComponents() {
     // Initialize the date picker utilities. 10/27/2015 0446 PM - josiahb
@@ -82,63 +78,6 @@ function showPreloader(show) {
     $('#preloadContainer')[show ? 'removeClass' : 'addClass']('none')[show ? 'addClass' : 'removeClass']('delay-show');
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Group: View Methods.
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function onViewMoreClick(evntClick) {
-    // Get a handle to the calling button, and the div it is linked to. Add the expanded
-    // class to the linked div, and set the "min-height" css property to the pixel value
-    // of the scrolling height for the linked div (this is so the height can animate using
-    // the css3 transition defined in the site.css file). Hide the calling button and show
-    // the associated view less button. 09/24/2015 0408 PM - josiahb
-    var btnViewMore = $(evntClick.currentTarget),
-        divLinked = $('#' + btnViewMore.data('linked'));
-
-    divLinked.addClass('expanded')
-             .addClass('transition')
-             .css({
-               "maxHeight": "100%",
-               "minHeight": divLinked.get(0).scrollHeight + "px"
-             })
-             .on(m_transitionEvent, function heightTransitionComplete() {
-                 // After the transition has finished, remove the transition class and set the
-                 // height to be 100% so the height will auto-adjust. 11/16/2015 1102 AM - josiahb
-                 divLinked.off(m_transitionEvent, heightTransitionComplete)
-                          .removeClass('transition')
-                          .css({
-                              "minHeight": "initial"
-                          });
-             });
-
-    btnViewMore.addClass('none')
-               .next('.view-less').removeClass('none');
-}
-
-function onViewLessClick(evntClick) {
-    // Get a handle to the calling button, and the div it is linked to. Remove the
-    // expanded class from the linked div, and reset the "min-height" css property
-    // to the initial setting. Hide the calling button, and show the associated
-    // view more button. 09/24/2015 0406 PM - josiahb
-    var btnViewLess = $(evntClick.currentTarget),
-        divLinked = $('#' + btnViewLess.data('linked'));
-
-    divLinked.removeClass('expanded')
-             .css({
-                 "height": divLinked.get(0).scrollHeight + "px"
-             });
-
-    // Set a timeout before adding the transition class and removing the height property
-    // from the style attribute so it will pull the default height from the stylesheet.
-    // 11/16/2015 1100 AM - josiahb
-    setTimeout(function() {
-      divLinked.addClass('transition')
-               .attr("style", divLinked.attr("style").replace(/height:([^;]+);/g, ''));
-    }, 100);
-
-    btnViewLess.addClass('none')
-               .prev('.view-more').removeClass('none');
-}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Group: Angular Methods.
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,10 +173,10 @@ mainApp.controller('HomeController', ['$scope', '$controller', function ($scope,
       .fail($scope.trainingError);
   };
 
+  // Called when the selected trainings list filter changes.
   $scope.updateSelectedTrainings = function() {
+    // Update the array of trainings being used to build out the list.
     $scope.trainings = $scope[$scope.selectedTrainings];
-
-    $scope.$apply();
   };
 
   // If the user is already logged in, call the logged in method.

@@ -61,7 +61,7 @@ namespace TrainingCurriculum.Models
         {
             TrainingEntities entities = new TrainingEntities();
             var user = entities.users.AsEnumerable()
-                                     .First(curUser => curUser.id == UserID);
+                                     .First(givenUser => givenUser.id == UserID);
             IEnumerable<group> userGroups = user.groups;
 
             foreach (group userGroup in user.groups)
