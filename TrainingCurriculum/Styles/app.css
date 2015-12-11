@@ -43,16 +43,9 @@
   margin-bottom: 0 !important; }
 
 .training-section {
-  height: 200px;
-  overflow-x: hidden;
-  overflow-y: hidden;
+  height: 100%;
   width: 100%;
   margin-bottom: 5px; }
-  .training-section.transition {
-    -webkit-transition: height 1s;
-    -moz-transition: height 1s;
-    -o-transition: height 1s;
-    transition: height 1s; }
 
 .view-more, .view-less {
   color: #000;
@@ -143,6 +136,13 @@ nav {
     vertical-align: middle; }
     nav a:hover {
       text-decoration: underline; }
+
+label {
+  display: inline; }
+
+select {
+  display: inline;
+  margin-bottom: 10px; }
 
 @media screen and (max-width: 500px) {
   form {

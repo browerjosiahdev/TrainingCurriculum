@@ -1,7 +1,28 @@
+<label for="selectedTrainings">Filter Trainings:</label>
+<select id="selectedTrainings" ng-change="updateSelectedTrainings()" ng-model="selectedTrainings">
+  <option value="requiredTrainings">Required</option>
+  <option value="scheduledTrainings">Scheduled</option>
+  <option value="completeTraining">Complete</option>
+</select>
+<section class="default training-section">
+    <div class="phase-container" ng-repeat="phase in trainings" ng-show="trainings.length">
+        <p class="phase-header">{{phase.name}}</p>
+        <table class="table table-hover table-training">
+            <tr ng-repeat="training in phase.trainings">
+                <td>{{training.topic}}</td>
+                <td ng-bind-html="renderHtml(training, 'description')"></td>
+                <td>{{training.duration}} minutes</td>
+            </tr>
+        </table>
+    </div>
+    <div class="phase-empty" ng-hide="trainings.length">
+      This list is currently empty.
+    </div>
+</section>
 ﻿<!--
 The below section displays the trainings associated with the current user, but
 haven't been scheduled by the user yet. 09/04/2015 0613 PM - josiahb
--->
+--
 <h1>REQUIRED TRAINING</h1>
 <section class="default training-section" id="incompleteTraining">
     <div class="phase-container" ng-repeat="phase in requiredTrainings" ng-show="requiredTrainings.length">
@@ -23,7 +44,7 @@ haven't been scheduled by the user yet. 09/04/2015 0613 PM - josiahb
 <!--
 The below section displays the trainings the current user is scheduled to take, but
 has yet to complete. 09/04/2015 0613 PM - josiahb
--->
+--
 <h1>SCHEDULED TRAINING</h1>
 <section class="default training-section" id="scheduledTraining">
     <div class="phase-container" ng-repeat="phase in scheduledTrainings" ng-show="scheduledTrainings.length">
@@ -45,7 +66,7 @@ has yet to complete. 09/04/2015 0613 PM - josiahb
 <!--
 The below section displays the trainings the current user has already completed.
 09/04/2015 0614 PM - josiahb
--->
+--
 <h1>COMPLETE TRAINING</h1>
 <section class="default training-section" id="completeTraining">
     <div class="phase-container" ng-repeat="phase in completedTrainings" ng-show="completedTrainings.length">
@@ -64,3 +85,4 @@ The below section displays the trainings the current user has already completed.
 </section>
 <a class="view-more" data-linked="completeTraining" href="javascript:void(0);" id="completeViewMore" ng-show="completedTrainings.length">VIEW MORE...</a>
 <a class="view-less none" data-linked="completeTraining" href="javascript:void(0);" id="completeViewLess">VIEW LESS...</a>
+-->

@@ -45,17 +45,8 @@
 
 .training-section {
   height: 100%;
-  max-height: 200px;
-  min-height: initial;
-  overflow-x: hidden;
-  overflow-y: hidden;
   width: 100%;
   margin-bottom: 5px;
-
-  &.transition {
-    @include transition(max-height, 1s);
-    @include transition(min-height, 1s);
-  }
 }
 
 .view-more, .view-less {
@@ -171,6 +162,15 @@ nav {
       text-decoration: underline;
     }
   }
+}
+
+label {
+  display: inline;
+}
+
+select {
+  display: inline;
+  margin-bottom: 10px;
 }
 
 @media screen and (max-width: 500px) {

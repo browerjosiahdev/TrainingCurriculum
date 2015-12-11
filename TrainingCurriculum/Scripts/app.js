@@ -1,3 +1,5 @@
+'use strict';
+
 ﻿var console;
 if (console === undefined) {
     console = {
@@ -203,6 +205,8 @@ mainApp.controller('HomeController', ['$scope', '$controller', function ($scope,
   $scope.scheduledTrainings = [];
   $scope.requiredTrainings  = [];
   $scope.completedTrainings = [];
+  $scope.trainings          = [];
+  $scope.selectedTrainings  = 'requiredTrainings';
 
   $scope.trainingsSuccess = function (data) {
     console.dir(data);
@@ -211,6 +215,9 @@ mainApp.controller('HomeController', ['$scope', '$controller', function ($scope,
       $scope.scheduledTrainings = data.scheduled;
       $scope.requiredTrainings  = data.required;
       $scope.completedTrainings = data.completed;
+
+      $scope.trainings = $scope[$scope.selectedTrainings];
+
       $scope.$apply();
     }
   };
@@ -225,6 +232,12 @@ mainApp.controller('HomeController', ['$scope', '$controller', function ($scope,
     $.getJSON('api/trainings/all')
       .done($scope.trainingsSuccess)
       .fail($scope.trainingError);
+  };
+
+  $scope.updateSelectedTrainings = function() {
+    $scope.trainings = $scope[$scope.selectedTrainings];
+
+    $scope.$apply();
   };
 
   // If the user is already logged in, call the logged in method.

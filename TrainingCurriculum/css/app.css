@@ -1,7 +1,18 @@
-@charset "UTF-8";
 /*
   Author: Allen Communication Learning Services
   Copyright: 2015
+  CMD: sass --watch app.scss:../../TrainingCurriculum/css/app.css --style compressed
+*/
+/*
+  Author: Allen Communication Learning Services
+  Copyright: 2015
+  Owner: app.scss
+  CMD: sass --watch app.scss:../../TrainingCurriculum/css/app.css --style compressed
+*/
+/*
+  Author: Allen Communication Learning Services
+  Copyright: 2015
+  Owner: app.scss
   CMD: sass --watch app.scss:../../TrainingCurriculum/css/app.css --style compressed
 */
 .alert {
@@ -33,21 +44,8 @@
 
 .training-section {
   height: 100%;
-  max-height: 200px;
-  min-height: initial;
-  overflow-x: hidden;
-  overflow-y: hidden;
   width: 100%;
   margin-bottom: 5px; }
-  .training-section.transition {
-    -webkit-transition: max-height 1s;
-    -moz-transition: max-height 1s;
-    -o-transition: max-height 1s;
-    transition: max-height 1s;
-    -webkit-transition: min-height 1s;
-    -moz-transition: min-height 1s;
-    -o-transition: min-height 1s;
-    transition: min-height 1s; }
 
 .view-more, .view-less {
   color: #000;
@@ -139,9 +137,17 @@ nav {
     nav a:hover {
       text-decoration: underline; }
 
+label {
+  display: inline; }
+
+select {
+  display: inline;
+  margin-bottom: 10px; }
+
 @media screen and (max-width: 500px) {
   form {
     left: 0;
     margin-left: 0;
     width: 100%; } }
+
 /*# sourceMappingURL=app.css.map */
