@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Diagnostics;
 using TrainingCurriculum.Models;
 
 namespace TrainingCurriculum.Controllers
@@ -117,8 +118,10 @@ namespace TrainingCurriculum.Controllers
             }
 
             TrainingEntities entities = new TrainingEntities();
-            IEnumerable<dynamic> userGroups = UserModel.GetGroups(Id);
+
+            IEnumerable<group> userGroups = UserModel.GetGroups(Id);
             var trainings = entities.phases.AsEnumerable()
+                                           .Where(phase => phase.trainings.Any(training => training.groups.Intersect(userGroups).Count() > 0))
                                            .Select(phase => new
                                            {
                                                name = phase.name,
@@ -129,13 +132,7 @@ namespace TrainingCurriculum.Controllers
                                                                               topic = training.topic,
                                                                               description = training.description,
                                                                               duration = training.duration
-                                                                          }),
-                                                groups = userGroups.AsEnumerable()
-                                                                   .Select(group => new
-                                                                   {
-                                                                       id = group.id,
-                                                                       name = group.name
-                                                                   })
+                                                                          })
                                            });
 
             return trainings.ToList();
