@@ -34,5 +34,29 @@ namespace TrainingCurriculum
         public virtual ICollection<training> trainings { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<user> users { get; set; }
+
+        /// <summary>
+        /// Override: Get the unique hash code for this group object.
+        /// </summary>
+        /// <returns>The ID defined in the database.</returns>
+        public override int GetHashCode()
+        {
+            return this.id;
+        }
+
+        /// <summary>
+        /// Override: Compare this group object with another given item.
+        /// </summary>
+        /// <param name="other">Item to compare against.</param>
+        /// <returns>True if the other item is a group and has a matching ID.</returns>
+        public override bool Equals(object other)
+        {
+            if (other is group)
+            {
+                return ((group)other).id == this.id;
+            }
+
+            return false;
+        }
     }
 }

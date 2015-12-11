@@ -5,6 +5,7 @@ using System.Web;
 using System.Security.Cryptography;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace TrainingCurriculum.Models
 {
@@ -49,6 +50,51 @@ namespace TrainingCurriculum.Models
             }
 
             return password;
+        }
+
+        /// <summary>
+        /// Get an enumerable list of all groups associated with the given user.
+        /// </summary>
+        /// <param name="UserID">ID of the user to get the groups for.</param>
+        /// <returns>Enumerable list of group object.</returns>
+        public static IEnumerable<group> GetGroups( int UserID )
+        {
+            TrainingEntities entities = new TrainingEntities();
+            var user = entities.users.AsEnumerable()
+                                     .First(curUser => curUser.id == UserID);
+            IEnumerable<group> userGroups = user.groups;
+
+            foreach (group userGroup in user.groups)
+            {
+                userGroups = GetParentGroups(userGroup, true).Concat<group>(userGroups);
+            }
+
+            return userGroups;
+        }
+
+        /// <summary>
+        /// Get the parent groups associated with the given group.
+        /// </summary>
+        /// <param name="childGroup">Group to get the parent groups for.</param>
+        /// <param name="isRoot">True if the given child group shouldn't be included in the returned value.</param>
+        /// <returns>Enumerable </returns>
+        private static IEnumerable<group> GetParentGroups( group childGroup, bool isRoot )
+        {
+            IEnumerable<group> parentGroups = new[] { childGroup };
+
+            if (childGroup.parent_id != null)
+            {
+                if (isRoot)
+                {
+                    parentGroups = GetParentGroups(childGroup.group2, false);
+                }
+                else
+                {
+                    parentGroups = GetParentGroups(childGroup.group2, false).Concat<group>(parentGroups);
+                }
+            }
+
+            return parentGroups;
         }
     }
 }

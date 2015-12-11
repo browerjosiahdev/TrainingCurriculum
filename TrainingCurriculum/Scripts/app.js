@@ -96,7 +96,8 @@ function onViewMoreClick(evntClick) {
     divLinked.addClass('expanded')
              .addClass('transition')
              .css({
-                 "height": divLinked.get(0).scrollHeight + "px"
+               "maxHeight": "100%",
+               "minHeight": divLinked.get(0).scrollHeight + "px"
              })
              .on(m_transitionEvent, function heightTransitionComplete() {
                  // After the transition has finished, remove the transition class and set the
@@ -104,7 +105,7 @@ function onViewMoreClick(evntClick) {
                  divLinked.off(m_transitionEvent, heightTransitionComplete)
                           .removeClass('transition')
                           .css({
-                              "height": "100%"
+                              "minHeight": "initial"
                           });
              });
 

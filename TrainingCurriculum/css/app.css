@@ -32,16 +32,22 @@
   margin-bottom: 0 !important; }
 
 .training-section {
-  height: 200px;
+  height: 100%;
+  max-height: 200px;
+  min-height: initial;
   overflow-x: hidden;
   overflow-y: hidden;
   width: 100%;
   margin-bottom: 5px; }
   .training-section.transition {
-    -webkit-transition: height 1s;
-    -moz-transition: height 1s;
-    -o-transition: height 1s;
-    transition: height 1s; }
+    -webkit-transition: max-height 1s;
+    -moz-transition: max-height 1s;
+    -o-transition: max-height 1s;
+    transition: max-height 1s;
+    -webkit-transition: min-height 1s;
+    -moz-transition: min-height 1s;
+    -o-transition: min-height 1s;
+    transition: min-height 1s; }
 
 .view-more, .view-less {
   color: #000;
